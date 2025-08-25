@@ -1,12 +1,12 @@
 <template>
   <v-container fluid>
-    <h1 class="mb-4">จัดการข้อมูลหน้าหลัก</h1>
+    <h1 class="mb-4">จัดการข้อมูลเกี่ยวกับเรา</h1>
 
-    <!-- ส่วนที่ 1: ข้อความ Banner -->
+    <!-- ส่วนที่ 1: ข้อความหัวข้อหลัก -->
     <v-card class="mb-6 pa-4">
       <v-row>
         <v-col>
-          <h3>ข้อความ Banner</h3>
+          <h3>ข้อความหัวข้อหลัก</h3>
         </v-col>
       </v-row>
       <v-textarea
@@ -18,86 +18,45 @@
       <v-btn color="primary" class="mt-2" @click="saveBanner"> บันทึก </v-btn>
     </v-card>
 
-    <!-- ส่วนที่ 2: ข้อความข้างแผนที่ -->
+    <!-- ส่วนที่ 2: ข้อความรายละเอียดระยะที่ ... -->
     <v-card class="mb-6 pa-4">
       <v-row>
         <v-col>
-          <h3>ข้อความเครือข่ายการรู้-รับ-ปรับตัว</h3>
-        </v-col>
-      </v-row>
-
-      <v-divider class="my-4"></v-divider>
-
-      <div v-for="i in 4" :key="i" class="mb-4">
-        <h5>ข้อความการ์ดที่ {{ i }}</h5>
-        <v-text-field
-          v-model="mapCards[i - 1].title"
-          placeholder="หัวข้อ"
-          variant="outlined"
-          dense
-          class="mb-2"
-        ></v-text-field>
-        <v-textarea
-          v-model="mapCards[i - 1].text"
-          placeholder="รายละเอียด"
-          rows="3"
-          variant="outlined"
-          auto-grow
-          dense
-        ></v-textarea>
-        <v-btn color="primary" class="mt-2" @click="saveCard(i - 1)">
-          บันทึก
-        </v-btn>
-        <v-divider class="my-4" v-if="i < 4"></v-divider>
-      </div>
-    </v-card>
-
-    <!-- ส่วนที่ 3: ข่าวสารและกิจกรรม -->
-    <v-card class="mb-6 pa-4">
-      <v-row>
-        <v-col>
-          <h3>ข่าวสารและกิจกรรม</h3>
+          <h3>ข้อความรายละเอียดระยะที่ ...</h3>
         </v-col>
       </v-row>
       <v-row>
         <v-col
           cols="12"
-          sm="6"
-          md="4"
+          sm="12"
+          md="12"
           v-for="(item, index) in newsList"
           :key="index"
         >
           <v-card class="pa-3 mb-4">
             <v-text-field
               v-model="item.location"
-              label="ชื่อพื้นที่"
-              outlined
+              label="ชื่อหัวข้อระยะที่ ..."
+              variant="outlined"
               dense
               class="mb-2"
             ></v-text-field>
-            <v-text-field
-              v-model="item.title"
-              label="ชื่อกิจกรรม/ข่าว"
-              outlined
-              dense
-              class="mb-2"
-            ></v-text-field>
-            <!-- <v-textarea
+            <v-textarea
               v-model="item.description"
               label="รายละเอียด"
               rows="3"
-              outlined
+              variant="outlined"
               dense
               class="mb-2"
-            ></v-textarea> -->
-            <v-file-input
+            ></v-textarea>
+            <!-- <v-file-input
               v-model="item.image"
               label="รูปภาพ"
               accept="image/*"
               outlined
               dense
               show-size
-            ></v-file-input>
+            ></v-file-input> -->
             <v-btn color="error" text class="mt-2" @click="removeNews(index)">
               ลบ
             </v-btn>
@@ -105,12 +64,31 @@
         </v-col>
       </v-row>
 
-      <v-btn color="primary" class="mt-2" @click="addNews">
-        เพิ่มข่าว/กิจกรรม
-      </v-btn>
+      <v-btn color="primary" class="mt-2" @click="addNews"> เพิ่ม </v-btn>
       <v-btn color="success" class="mt-2 ml-2" @click="saveNews">
         บันทึกทั้งหมด
       </v-btn>
+    </v-card>
+
+    <v-card class="mb-6 pa-4">
+      <v-row>
+        <v-col>
+          <h3>รูปภาพ Timeline</h3>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-card class="pa-3 mb-4">
+            <v-file-input
+              label="รูปภาพ Timeline"
+              accept="image/*"
+              variant="outlined"
+              dense
+              show-size
+            ></v-file-input>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-card>
   </v-container>
 </template>
@@ -119,7 +97,7 @@
 import { ref } from "vue";
 
 // ส่วน Banner
-const bannerText = ref("ข้อความเริ่มต้น Banner");
+const bannerText = ref("");
 
 // ส่วน ข้อความข้างแผนที่
 const mapCards = ref([
