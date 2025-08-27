@@ -38,6 +38,7 @@
               placeholder="หัวข้อ"
               variant="outlined"
               dense
+              rounded
               class="mb-2"
             ></v-text-field>
             <v-textarea
@@ -46,6 +47,7 @@
               rows="3"
               auto-grow
               dense
+              rounded
               variant="outlined"
             ></v-textarea>
           </v-card>
@@ -68,22 +70,24 @@
             <v-text-field
               v-model="item.location"
               label="ชื่อพื้นที่"
-              outlined
+              variant="outlined"
               dense
+              rounded
               class="mb-2"
             ></v-text-field>
             <v-text-field
               v-model="item.title"
               label="ชื่อกิจกรรม/ข่าว"
-              outlined
+              variant="outlined"
               dense
+              rounded
               class="mb-2"
             ></v-text-field>
             <v-file-input
               v-model="item.image"
               label="รูปภาพ"
               accept="image/*"
-              outlined
+              variant="outlined"
               dense
               show-size
               prepend-icon="mdi-image"

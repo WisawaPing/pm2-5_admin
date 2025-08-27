@@ -17,7 +17,6 @@
         accept="image/*"
         variant="outlined"
         dense
-        rounded
         show-size
         prepend-icon="mdi-image"
       ></v-file-input>

@@ -41,6 +41,7 @@
               label="ชื่อหัวข้อระยะที่ ..."
               variant="outlined"
               dense
+              rounded
               class="mb-3"
             ></v-text-field>
             <v-textarea
@@ -50,6 +51,7 @@
               variant="outlined"
               auto-grow
               dense
+              rounded
               class="mb-3"
             ></v-textarea>
             <v-btn color="error" rounded text @click="removeNews(index)">
@@ -77,7 +79,6 @@
               accept="image/*"
               variant="outlined"
               dense
-              rounded
               show-size
               prepend-icon="mdi-image"
             ></v-file-input>

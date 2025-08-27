@@ -18,7 +18,6 @@
         label="อัปโหลดภาพหลักสูตร"
         accept="image/*"
         variant="outlined"
-        rounded
         class="mb-4"
         prepend-icon="mdi-image"
       />

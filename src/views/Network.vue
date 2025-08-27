@@ -35,7 +35,6 @@
         accept="image/*"
         variant="outlined"
         dense
-        rounded
         show-size
         prepend-icon="mdi-image"
       ></v-file-input>
@@ -70,14 +69,15 @@
 
             <v-row dense>
               <v-col cols="12" md="4">
-                <v-text-field
+                <v-autocomplete
                   v-model="item.region"
                   label="เลือกภาค"
+                  :items="regions"
                   variant="outlined"
                   dense
                   rounded
                   prepend-icon="mdi-map-marker"
-                ></v-text-field>
+                />
               </v-col>
 
               <v-col cols="12" md="4">
@@ -218,6 +218,15 @@ const network = ref({
     },
   ],
 });
+
+const regions = [
+  "ภาคเหนือ",
+  "ภาคตะวันออกเฉียงเหนือ",
+  "ภาคกลาง",
+  "ภาคตะวันออก",
+  "ภาคตะวันตก",
+  "ภาคใต้",
+];
 
 // ฟังก์ชันจัดการ loop
 const addNetwork = () => {
