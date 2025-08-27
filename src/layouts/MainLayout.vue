@@ -72,13 +72,13 @@
                 >
                   <v-list-item-content>
                     <v-list-item-title class="truncate font-medium">
-                      Banner
+                      จัดการข้อมูลภาพรวม
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </div>
             </template>
-            <span>Banner</span>
+            <span>จัดการข้อมูลภาพรวม</span>
           </v-tooltip>
 
           <v-tooltip bottom>
@@ -130,13 +130,13 @@
                 >
                   <v-list-item-content>
                     <v-list-item-title class="truncate font-medium"
-                      >ภาพรวม ชุมชนวิถีคาร์บอนต่ำ</v-list-item-title
+                      >จัดการข้อมูลภาพรวม</v-list-item-title
                     >
                   </v-list-item-content>
                 </v-list-item>
               </div>
             </template>
-            <span>ภาพรวม ชุมชนวิถีคาร์บอนต่ำ</span>
+            <span>จัดการข้อมูลภาพรวม</span>
           </v-tooltip>
 
           <v-tooltip bottom>
@@ -209,13 +209,13 @@
                 >
                   <v-list-item-content>
                     <v-list-item-title class="truncate font-medium"
-                      >Banner</v-list-item-title
+                      >จัดการข้อมูลภาพรวม</v-list-item-title
                     >
                   </v-list-item-content>
                 </v-list-item>
               </div>
             </template>
-            <span>Banner</span>
+            <span>จัดการข้อมูลภาพรวม</span>
           </v-tooltip>
 
           <v-tooltip bottom>

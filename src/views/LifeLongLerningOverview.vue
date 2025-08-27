@@ -9,27 +9,23 @@
       </v-btn>
     </h1>
 
-    <!-- ส่วนที่ 1: รูปภาพ Banner -->
-    <v-card class="mb-8 pa-6 banner-card" elevation="6">
+    <v-card class="mb-8 pa-6 text-card" elevation="4">
       <h3 class="section-title">รูปภาพ Banner</h3>
-      <v-row>
-        <v-col cols="12" md="12">
-          <v-file-input
-            v-model="bannerImage"
-            label="เลือกภาพ Banner"
-            accept="image/*"
-            variant="outlined"
-            dense
-            show-size
-            prepend-icon="mdi-image"
-          ></v-file-input>
-        </v-col>
-      </v-row>
+      <v-file-input
+        v-model="bannerImage"
+        label="เลือกภาพ Banner"
+        accept="image/*"
+        variant="outlined"
+        dense
+        rounded
+        show-size
+        prepend-icon="mdi-image"
+      ></v-file-input>
     </v-card>
 
-    <!-- ส่วนที่ 2: ข้อความ Banner -->
-    <v-card class="pa-6 text-card" elevation="4">
-      <h3 class="mb-4 text-h6 font-weight-bold">ข้อความ Banner</h3>
+    <!-- ข้อความ Banner -->
+    <v-card class="mb-8 pa-6 text-card" elevation="4">
+      <h3 class="section-title">ข้อความ Banner</h3>
       <v-textarea
         v-model="bannerText"
         variant="outlined"
