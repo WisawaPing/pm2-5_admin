@@ -1,65 +1,62 @@
 <template>
-  <v-container fluid>
-    <h1 class="mb-4">จัดการข้อมูลหน้าหลัก</h1>
+  <v-container fluid class="pa-6">
+    <h1 class="mb-6 title d-flex justify-space-between align-center">
+      จัดการข้อมูลหน้าหลัก
+      <!-- ปุ่มบันทึกมุมขวาบน -->
+      <v-btn color="success" rounded @click="saveAll">
+        <v-icon start>mdi-content-save</v-icon>
+        บันทึกทั้งหมด
+      </v-btn>
+    </h1>
 
     <!-- ส่วนที่ 1: ข้อความ Banner -->
-    <v-card class="mb-6 pa-4">
-      <v-row>
-        <v-col>
-          <h3>ข้อความ Banner</h3>
-        </v-col>
-      </v-row>
+    <v-card class="mb-8 pa-6 banner-card" elevation="6">
+      <h3 class="section-title">ข้อความ Banner</h3>
       <v-textarea
         v-model="bannerText"
         rows="3"
         variant="outlined"
         auto-grow
+        dense
+        rounded
+        class="mb-4"
+        placeholder="พิมพ์ข้อความ Banner ที่นี่..."
       ></v-textarea>
-      <v-btn color="primary" class="mt-2" @click="saveBanner"> บันทึก </v-btn>
     </v-card>
 
     <!-- ส่วนที่ 2: ข้อความข้างแผนที่ -->
-    <v-card class="mb-6 pa-4">
-      <v-row>
-        <v-col>
-          <h3>ข้อความเครือข่ายการรู้-รับ-ปรับตัว</h3>
+    <v-card class="mb-8 pa-6 banner-card" elevation="6">
+      <h3 class="section-title">ข้อความเครือข่ายการรู้-รับ-ปรับตัว</h3>
+      <v-divider class="my-6"></v-divider>
+
+      <v-row dense>
+        <v-col cols="12" md="6" v-for="(card, i) in mapCards" :key="i">
+          <v-card class="pa-4 card-item" elevation="4">
+            <h5 class="mb-3">การ์ด {{ i + 1 }}</h5>
+            <v-text-field
+              v-model="card.title"
+              placeholder="หัวข้อ"
+              variant="outlined"
+              dense
+              class="mb-2"
+            ></v-text-field>
+            <v-textarea
+              v-model="card.text"
+              placeholder="รายละเอียด"
+              rows="3"
+              auto-grow
+              dense
+              variant="outlined"
+            ></v-textarea>
+          </v-card>
         </v-col>
       </v-row>
-
-      <v-divider class="my-4"></v-divider>
-
-      <div v-for="i in 4" :key="i" class="mb-4">
-        <h5>ข้อความการ์ดที่ {{ i }}</h5>
-        <v-text-field
-          v-model="mapCards[i - 1].title"
-          placeholder="หัวข้อ"
-          variant="outlined"
-          dense
-          class="mb-2"
-        ></v-text-field>
-        <v-textarea
-          v-model="mapCards[i - 1].text"
-          placeholder="รายละเอียด"
-          rows="3"
-          variant="outlined"
-          auto-grow
-          dense
-        ></v-textarea>
-        <v-btn color="primary" class="mt-2" @click="saveCard(i - 1)">
-          บันทึก
-        </v-btn>
-        <v-divider class="my-4" v-if="i < 4"></v-divider>
-      </div>
     </v-card>
 
     <!-- ส่วนที่ 3: ข่าวสารและกิจกรรม -->
-    <v-card class="mb-6 pa-4">
-      <v-row>
-        <v-col>
-          <h3>ข่าวสารและกิจกรรม</h3>
-        </v-col>
-      </v-row>
-      <v-row>
+    <v-card class="mb-8 pa-6 banner-card" elevation="6">
+      <h3 class="section-title">ข่าวสารและกิจกรรม</h3>
+      <v-row dense>
         <v-col
           cols="12"
           sm="6"
@@ -67,7 +64,7 @@
           v-for="(item, index) in newsList"
           :key="index"
         >
-          <v-card class="pa-3 mb-4">
+          <v-card class="pa-4 card-item" elevation="4">
             <v-text-field
               v-model="item.location"
               label="ชื่อพื้นที่"
@@ -82,14 +79,6 @@
               dense
               class="mb-2"
             ></v-text-field>
-            <!-- <v-textarea
-              v-model="item.description"
-              label="รายละเอียด"
-              rows="3"
-              outlined
-              dense
-              class="mb-2"
-            ></v-textarea> -->
             <v-file-input
               v-model="item.image"
               label="รูปภาพ"
@@ -97,31 +86,45 @@
               outlined
               dense
               show-size
+              prepend-icon="mdi-image"
             ></v-file-input>
-            <v-btn color="error" text class="mt-2" @click="removeNews(index)">
+            <v-btn
+              color="error"
+              rounded
+              text
+              class="mt-3"
+              @click="removeNews(index)"
+            >
+              <v-icon start>mdi-delete</v-icon>
               ลบ
             </v-btn>
           </v-card>
         </v-col>
       </v-row>
 
-      <v-btn color="primary" class="mt-2" @click="addNews">
+      <v-btn color="primary" rounded class="mt-4" @click="addNews">
+        <v-icon start>mdi-plus</v-icon>
         เพิ่มข่าว/กิจกรรม
       </v-btn>
-      <v-btn color="success" class="mt-2 ml-2" @click="saveNews">
+    </v-card>
+
+    <!-- ปุ่มบันทึกมุมขวาล่าง -->
+    <div class="d-flex justify-end mt-4">
+      <v-btn color="success" rounded @click="saveAll">
+        <v-icon start>mdi-content-save</v-icon>
         บันทึกทั้งหมด
       </v-btn>
-    </v-card>
+    </div>
   </v-container>
 </template>
 
 <script setup>
 import { ref } from "vue";
 
-// ส่วน Banner
+// Banner
 const bannerText = ref("ข้อความเริ่มต้น Banner");
 
-// ส่วน ข้อความข้างแผนที่
+// ข้อความข้างแผนที่
 const mapCards = ref([
   { title: "", text: "" },
   { title: "", text: "" },
@@ -129,41 +132,46 @@ const mapCards = ref([
   { title: "", text: "" },
 ]);
 
-// ส่วน ข่าวสารและกิจกรรม
+// ข่าวสารและกิจกรรม
 const newsList = ref([{ title: "", description: "" }]);
 
 // ฟังก์ชัน
-const saveBanner = () => {
-  console.log("บันทึก Banner:", bannerText.value);
-  alert("บันทึกข้อความ Banner เรียบร้อย");
-};
+const addNews = () => newsList.value.push({ title: "", description: "" });
+const removeNews = (index) => newsList.value.splice(index, 1);
 
-const saveCard = (index) => {
-  console.log(`บันทึกการ์ด ${index + 1}:`, mapCards.value[index]);
-  alert(`บันทึกการ์ด ${index + 1} เรียบร้อย`);
-};
-
-const addNews = () => {
-  newsList.value.push({ title: "", description: "" });
-};
-
-const removeNews = (index) => {
-  newsList.value.splice(index, 1);
-};
-
-const saveNews = () => {
-  console.log("บันทึกข่าวสารทั้งหมด:", newsList.value);
-  alert("บันทึกข่าวสารเรียบร้อย");
+// ฟังก์ชันบันทึกทั้งหมด
+const saveAll = () => {
+  console.log("Banner:", bannerText.value);
+  console.log("Map Cards:", mapCards.value);
+  console.log("News List:", newsList.value);
+  alert("บันทึกข้อมูลทั้งหมดเรียบร้อย!");
 };
 </script>
 
 <style scoped>
-h1 {
+.title {
+  color: #0d2a4f;
+  font-weight: 700;
+}
+
+.section-title {
   color: #0d2a4f;
   font-weight: 600;
+  margin-bottom: 1rem;
 }
-h3 {
-  color: #0d2a4f;
-  font-weight: 500;
+
+/* การ์ด modern */
+.banner-card {
+  border-radius: 16px;
+  background-color: #f5f7fa;
+}
+
+.card-item {
+  border-radius: 12px;
+  transition: 0.3s;
+}
+.card-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 </style>

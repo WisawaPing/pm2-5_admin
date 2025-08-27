@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="pa-6">
     <h1 class="mb-6 title d-flex justify-space-between align-center">
-      จัดการข้อมูล Banner
+      จัดการข้อมูลนวัตกรรม Banner
       <!-- ปุ่มบันทึกมุมขวาบน -->
       <v-btn color="success" rounded @click="saveAll">
         <v-icon start>mdi-content-save</v-icon>
@@ -89,5 +89,3 @@ const saveAll = () => {
   box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
 }
 </style>
-
-

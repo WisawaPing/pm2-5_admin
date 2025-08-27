@@ -15,31 +15,42 @@ const routes = [
     component: MainLayout,
     meta: { requiresAuth: true },
     children: [
+      // หน้าหลัก
       {
         path: "",
         name: "Dashboard",
         component: () => import("@/views/Dashboard.vue"),
       },
+
+      // เกี่ยวกับเรา
       {
         path: "about",
         name: "About",
         component: () => import("@/views/About.vue"),
       },
+
+      // นวัตกรรมโดดเด่น
       {
-        path: "innovation-pm25",
-        name: "InnovationPM25",
-        component: () => import("@/views/InnovationPM25.vue"),
+        path: "innovation-banner",
+        name: "InnovationBanner",
+        component: () => import("@/views/InnovationBanner.vue"),
       },
       {
-        path: "innovation-community",
-        name: "InnovationCommunity",
-        component: () => import("@/views/InnovationCommunity.vue"),
+        path: "innovation-add-type-index",
+        name: "InnovationAddTypeIndex",
+        component: () => import("@/views/InnovationAddTypeIndex.vue"),
       },
       {
-        path: "innovation-forest-agriculture",
-        name: "InnovationForestAgriculture",
-        component: () => import("@/views/InnovationForestAgriculture.vue"),
+        path: "innovation-add-type",
+        name: "InnovationAddType",
+        component: () => import("@/views/InnovationAddType.vue"),
       },
+      {
+        path: "innovation-edit-type",
+        name: "InnovationEditType",
+        component: () => import("@/views/InnovationEditType.vue"),
+      },
+
       // ชุมชนวิถีคาร์บอนต่ำ
       {
         path: "carbon-low-overview",
@@ -47,34 +58,48 @@ const routes = [
         component: () => import("@/views/CarbonLowOverview.vue"),
       },
       {
-        path: "carbon-low-forest-agriculture",
-        name: "CarbonLowForestAgriculture",
-        component: () => import("@/views/CarbonLowForestAgriculture.vue"),
+        path: "carbon-low-add-type-index",
+        name: "CarbonLowAddTypeIndex",
+        component: () => import("@/views/CarbonLowAddTypeIndex.vue"),
       },
       {
-        path: "carbon-low-waste",
-        name: "CarbonLowWaste",
-        component: () => import("@/views/CarbonLowWaste.vue"),
+        path: "carbon-low-add-type",
+        name: "CarbonLowAddType",
+        component: () => import("@/views/CarbonLowAddType.vue"),
       },
       {
-        path: "carbon-low-energy",
-        name: "CarbonLowEnergy",
-        component: () => import("@/views/CarbonLowEnergy.vue"),
+        path: "carbon-low-edit-type",
+        name: "CarbonLowEditType",
+        component: () => import("@/views/CarbonLowEditType.vue"),
       },
+
+      // เครือข่าย
       {
         path: "network",
         name: "Network",
         component: () => import("@/views/Network.vue"),
       },
+
+      // life-long-learning
       {
         path: "life-long-learing-overview",
         name: "LifeLongLerningOverview",
         component: () => import("@/views/LifeLongLerningOverview.vue"),
       },
       {
+        path: "life-long-learing-course-index",
+        name: "LifeLongLerningCourseIndex",
+        component: () => import("@/views/LifeLongLerningCourseIndex.vue"),
+      },
+      {
         path: "life-long-learing-course",
         name: "LifeLongLerningCourse",
         component: () => import("@/views/LifeLongLerningCourse.vue"),
+      },
+      {
+        path: "life-long-learing-course-edit",
+        name: "LifeLongLerningCourseEdit",
+        component: () => import("@/views/LifeLongLerningCourseEdit.vue"),
       },
       {
         path: "contact",

@@ -63,67 +63,47 @@
 
           <v-tooltip bottom>
             <template #activator="{ props: tooltipProps }">
-              <div v-bind="tooltipProps" @click="goTo('/innovation-pm25')">
+              <div v-bind="tooltipProps" @click="goTo('/innovation-banner')">
                 <v-list-item
                   class="rounded-lg"
                   :class="
-                    $route.path === '/innovation-pm25' ? 'active-item' : ''
+                    $route.path === '/innovation-banner' ? 'active-item' : ''
                   "
                 >
                   <v-list-item-content>
                     <v-list-item-title class="truncate font-medium">
-                      นวัตกรรมการรับมือจากภัยฝุ่น PM2.5
+                      Banner
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </div>
             </template>
-            <span>นวัตกรรมการรับมือจากภัยฝุ่น PM2.5</span>
-          </v-tooltip>
-
-          <v-tooltip bottom>
-            <template #activator="{ props: tooltipProps }">
-              <div v-bind="tooltipProps" @click="goTo('/innovation-community')">
-                <v-list-item
-                  class="rounded-lg"
-                  :class="
-                    $route.path === '/innovation-community' ? 'active-item' : ''
-                  "
-                >
-                  <v-list-item-content>
-                    <v-list-item-title class="truncate font-medium">
-                      นวัตกรรมการลดแหล่งกำเนิดในพื้นที่ชุมชน
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </div>
-            </template>
-            <span>นวัตกรรมการลดแหล่งกำเนิดในพื้นที่ชุมชน</span>
+            <span>Banner</span>
           </v-tooltip>
 
           <v-tooltip bottom>
             <template #activator="{ props: tooltipProps }">
               <div
                 v-bind="tooltipProps"
-                @click="goTo('/innovation-forest-agriculture')"
+                @click="goTo('/innovation-add-type-index')"
               >
                 <v-list-item
                   class="rounded-lg"
                   :class="
-                    $route.path === '/innovation-forest-agriculture'
+                    $route.path === '/innovation-add-type-index'
                       ? 'active-item'
                       : ''
                   "
                 >
                   <v-list-item-content>
                     <v-list-item-title class="truncate font-medium">
-                      นวัตกรรมลดแหล่งกำเนิดในพื้นที่ป่าไม้และพื้นที่การเกษตร
+                      จัดการข้อมูลประเภทนวัตกรรมการต่างๆ
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </div>
             </template>
-            <span>นวัตกรรมลดแหล่งกำเนิดในพื้นที่ป่าไม้และพื้นที่การเกษตร</span>
+            <span>จัดการข้อมูลประเภทนวัตกรรมการต่างๆ</span>
           </v-tooltip>
         </v-list-group>
 
@@ -163,65 +143,25 @@
             <template #activator="{ props: tooltipProps }">
               <div
                 v-bind="tooltipProps"
-                @click="goTo('/carbon-low-forest-agriculture')"
+                @click="goTo('/carbon-low-add-type-index')"
               >
                 <v-list-item
                   class="rounded-lg"
                   :class="
-                    $route.path === '/carbon-low-forest-agriculture'
+                    $route.path === '/carbon-low-add-type-index'
                       ? 'active-item'
                       : ''
                   "
                 >
                   <v-list-item-content>
                     <v-list-item-title class="truncate font-medium">
-                      โครงการด้านป่าไม้และการเกษตร (Forest/Agriculture)
+                      จัดการข้อมูลประเภทชุมชนวิถีคาร์บอนต่ำ
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </div>
             </template>
-            <span>โครงการด้านป่าไม้และการเกษตร (Forest/Agriculture)</span>
-          </v-tooltip>
-
-          <v-tooltip bottom>
-            <template #activator="{ props: tooltipProps }">
-              <div v-bind="tooltipProps" @click="goTo('/carbon-low-waste')">
-                <v-list-item
-                  class="rounded-lg"
-                  :class="
-                    $route.path === '/carbon-low-waste' ? 'active-item' : ''
-                  "
-                >
-                  <v-list-item-content>
-                    <v-list-item-title class="truncate font-medium">
-                      โครงการด้านการจัดการของเสีย (Waste)
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </div>
-            </template>
-            <span>โครงการด้านการจัดการของเสีย (Waste)</span>
-          </v-tooltip>
-
-          <v-tooltip bottom>
-            <template #activator="{ props: tooltipProps }">
-              <div v-bind="tooltipProps" @click="goTo('/carbon-low-energy')">
-                <v-list-item
-                  class="rounded-lg"
-                  :class="
-                    $route.path === '/carbon-low-energy' ? 'active-item' : ''
-                  "
-                >
-                  <v-list-item-content>
-                    <v-list-item-title class="truncate font-medium">
-                      โครงการด้านพลังงาน (Energy)
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </div>
-            </template>
-            <span>โครงการด้านพลังงาน (Energy)</span>
+            <span>จัดการข้อมูลประเภทชุมชนวิถีคาร์บอนต่ำ</span>
           </v-tooltip>
         </v-list-group>
 
@@ -269,25 +209,25 @@
                 >
                   <v-list-item-content>
                     <v-list-item-title class="truncate font-medium"
-                      >ภาพรวม Life Long Learning</v-list-item-title
+                      >Banner</v-list-item-title
                     >
                   </v-list-item-content>
                 </v-list-item>
               </div>
             </template>
-            <span>ภาพรวม Life Long Learning</span>
+            <span>Banner</span>
           </v-tooltip>
 
           <v-tooltip bottom>
             <template #activator="{ props: tooltipProps }">
               <div
                 v-bind="tooltipProps"
-                @click="goTo('/life-long-learing-course')"
+                @click="goTo('/life-long-learing-course-index')"
               >
                 <v-list-item
                   class="rounded-lg"
                   :class="
-                    $route.path === '/life-long-learing-course'
+                    $route.path === '/life-long-learing-course-index'
                       ? 'active-item'
                       : ''
                   "
