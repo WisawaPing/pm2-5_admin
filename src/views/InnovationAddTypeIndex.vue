@@ -5,13 +5,9 @@
     <v-row class="align-center mb-4">
       <v-col cols="12" md="6">
         <v-autocomplete
+          v-model="filterType"
           label="ค้นหาประเภท"
-          :items="[
-            'ทั้งหมด',
-            'นวัตกรรมการรับมือจากภัยฝุ่น PM2.5',
-            'นวัตกรรมการลดแหล่งกำเนิดในพื้นที่ชุมชน',
-            'นวัตกรรมลดแหล่งกำเนิดในพื้นที่ป่าไม้และพื้นที่การเกษตร',
-          ]"
+          :items="['ทั้งหมด', ...typesList]"
           variant="outlined"
           dense
           clearable
@@ -25,17 +21,16 @@
           size="large"
           prepend-icon="mdi-plus"
           class="px-6"
-          @click="goToAdd()"
+          @click="goToAdd"
         >
           เพิ่ม
         </v-btn>
       </v-col>
     </v-row>
 
-    <!-- ตารางแบบ clean พร้อม pagination -->
     <v-data-table
       :headers="headers"
-      :items="innovationList"
+      :items="filteredList"
       item-key="id"
       class="innovation-table elevation-1 mt-4"
       dense
@@ -85,6 +80,9 @@
             color="blue-grey lighten-4"
             class="ma-1"
           >
+            <v-avatar size="24" class="mr-1">
+              <v-img :src="img" />
+            </v-avatar>
             ภาพ {{ i + 1 }}
           </v-chip>
         </v-chip-group>
@@ -101,50 +99,81 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
+import { getInnovationTypes, deleteInnovationType } from "@/api/innovationType";
+
 const router = useRouter();
 
-const innovationList = ref([
-  {
-    id: 1,
-    type: "นวัตกรรมการรับมือจากภัยฝุ่น PM2.5",
-    title: "โครงการทดสอบ 1",
-    location: "เชียงใหม่",
-    planImage: "https://via.placeholder.com/150",
-    gallery: [
-      "https://via.placeholder.com/100",
-      "https://via.placeholder.com/101",
-    ],
-    videoLink: "https://youtube.com/example1",
-  },
-]);
+const innovationList = ref([]);
+const filterType = ref("ทั้งหมด");
+const typesList = ref([]);
 
 const headers = [
   { title: "ประเภท", key: "type" },
   { title: "ชื่อหัวข้อ", key: "title" },
   { title: "สถานที่ตั้ง", key: "location" },
-  { title: "ภาพแผนผัง", key: "planImage" },
-  { title: "แกลลอรี่", key: "gallery" },
-  { title: "วีดีโอ", key: "videoLink" },
+  // { title: "ภาพแผนผัง", key: "planImage" },
+  // { title: "แกลลอรี่", key: "gallery" },
+  // { title: "วีดีโอ", key: "videoLink" },
   { title: "Actions", key: "actions", sortable: false },
 ];
 
-const deleteInnovation = (id) => {
-  if (confirm("คุณต้องการลบข้อมูลนี้หรือไม่?")) {
-    innovationList.value = innovationList.value.filter((i) => i.id !== id);
+// ดึงข้อมูลจาก API
+const fetchData = async () => {
+  try {
+    const res = await getInnovationTypes();
+    if (res.response_status !== "ERROR") {
+      innovationList.value = res.data.map((item) => ({
+        ...item,
+        gallery: Array.isArray(item.gallery) ? item.gallery : [],
+      }));
+
+      // สร้าง list ประเภทแบบ unique
+      typesList.value = [...new Set(innovationList.value.map((i) => i.type))];
+    } else {
+      alert(res.message);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("เกิดข้อผิดพลาดในการดึงข้อมูล");
   }
 };
 
-const goToAdd = async () => {
+onMounted(fetchData);
+
+// กรองรายการตามประเภท
+const filteredList = computed(() => {
+  if (filterType.value === "ทั้งหมด" || !filterType.value)
+    return innovationList.value;
+  return innovationList.value.filter((i) => i.type === filterType.value);
+});
+
+const goToAdd = () => {
   router.push("/innovation-add-type");
 };
 
-const goToEdit = async (item, isView) => {
+const goToEdit = (item, isView) => {
   router.push({
-    path: "/innovation-edit-type",
+    path: "/innovation-add-type",
     query: { id: item.id, view: isView },
   });
+};
+
+const deleteInnovation = async (id) => {
+  if (confirm("คุณต้องการลบข้อมูลนี้หรือไม่?")) {
+    try {
+      const res = await deleteInnovationType(id);
+      if (res.response_status !== "ERROR") {
+        innovationList.value = innovationList.value.filter((i) => i.id !== id);
+      } else {
+        alert(res.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("เกิดข้อผิดพลาดในการลบข้อมูล");
+    }
+  }
 };
 </script>
 
@@ -154,7 +183,6 @@ const goToEdit = async (item, isView) => {
   font-weight: 700;
 }
 
-/* ตาราง clean */
 .innovation-table {
   border-radius: 12px;
   overflow: hidden;

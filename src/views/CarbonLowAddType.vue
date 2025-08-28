@@ -2,7 +2,7 @@
   <v-container fluid class="pa-6">
     <h1 class="mb-6 title d-flex justify-space-between align-center">
       จัดการข้อมูลประเภทชุมชนวิถีคาร์บอนต่ำ
-      <v-btn color="success" rounded @click="saveCommunity">
+      <v-btn v-if="!isView" color="success" rounded @click="saveCommunity">
         <v-icon start>mdi-content-save</v-icon>
         บันทึกทั้งหมด
       </v-btn>
@@ -23,6 +23,7 @@
         dense
         rounded
         prepend-icon="mdi-pencil"
+        :disabled="isView"
       ></v-autocomplete>
     </v-card>
 
@@ -38,6 +39,7 @@
             dense
             rounded
             prepend-icon="mdi-pencil"
+            :disabled="isView"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -48,6 +50,7 @@
             dense
             rounded
             prepend-icon="mdi-map-marker"
+            :disabled="isView"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -58,6 +61,7 @@
             dense
             rounded
             prepend-icon="mdi-leaf"
+            :disabled="isView"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -68,6 +72,7 @@
             dense
             rounded
             prepend-icon="mdi-factory"
+            :disabled="isView"
           ></v-text-field>
         </v-col>
         <v-col cols="12">
@@ -78,6 +83,7 @@
             variant="outlined"
             auto-grow
             rounded
+            :disabled="isView"
           ></v-textarea>
         </v-col>
       </v-row>
@@ -94,7 +100,16 @@
         dense
         show-size
         prepend-icon="mdi-image"
+        :disabled="isView"
       ></v-file-input>
+      <v-img
+        v-if="
+          community.workflowImage && typeof community.workflowImage === 'string'
+        "
+        :src="community.workflowImage"
+        max-width="300"
+        class="mt-2"
+      />
     </v-card>
 
     <!-- ภาพกิจกรรม -->
@@ -109,11 +124,21 @@
         dense
         show-size
         prepend-icon="mdi-image-multiple"
+        :disabled="isView"
       ></v-file-input>
+      <v-row v-if="community.activityImages.length > 0" class="mt-2">
+        <v-col
+          v-for="(img, i) in community.activityImages"
+          :key="i"
+          cols="auto"
+        >
+          <v-img :src="img" max-width="100" max-height="100" />
+        </v-col>
+      </v-row>
     </v-card>
 
     <!-- ปุ่มบันทึกล่าง -->
-    <div class="d-flex justify-end mt-4">
+    <div class="d-flex justify-end mt-4" v-if="!isView">
       <v-btn color="success" rounded @click="saveCommunity">
         <v-icon start>mdi-content-save</v-icon>
         บันทึกทั้งหมด
@@ -123,7 +148,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import {
+  createCommunityType,
+  getCommunityTypeById,
+  updateCommunityType,
+} from "@/api/communityType";
+
+const router = useRouter();
+const route = useRoute();
 
 const community = ref({
   type: "",
@@ -136,9 +170,38 @@ const community = ref({
   activityImages: [],
 });
 
-const saveCommunity = () => {
-  console.log("บันทึกชุมชนวิถีคาร์บอนต่ำ:", community.value);
-  alert("บันทึกข้อมูลเรียบร้อย!");
+const isView = ref(false);
+const isEdit = ref(false);
+
+onMounted(async () => {
+  const id = route.query.id;
+  isView.value = route.query.view === "true";
+  isEdit.value = !!id;
+
+  if (id) {
+    try {
+      const res = await getCommunityTypeById(id);
+      Object.assign(community.value, res.data);
+    } catch (err) {
+      console.error(err);
+      alert("ไม่สามารถดึงข้อมูลได้");
+    }
+  }
+});
+
+const saveCommunity = async () => {
+  try {
+    if (isEdit.value) {
+      await updateCommunityType(route.query.id, community.value);
+    } else {
+      await createCommunityType(community.value);
+    }
+    alert("✅ บันทึกข้อมูลทั้งหมดเรียบร้อย!");
+    router.push("/carbon-low-add-type-index");
+  } catch (err) {
+    console.error(err);
+    alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+  }
 };
 </script>
 

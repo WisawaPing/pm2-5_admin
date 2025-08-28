@@ -197,12 +197,12 @@
             <template #activator="{ props: tooltipProps }">
               <div
                 v-bind="tooltipProps"
-                @click="goTo('/life-long-learing-overview')"
+                @click="goTo('/life-long-learning-overview')"
               >
                 <v-list-item
                   class="rounded-lg"
                   :class="
-                    $route.path === '/life-long-learing-overview'
+                    $route.path === '/life-long-learning-overview'
                       ? 'active-item'
                       : ''
                   "
@@ -222,12 +222,12 @@
             <template #activator="{ props: tooltipProps }">
               <div
                 v-bind="tooltipProps"
-                @click="goTo('/life-long-learing-course-index')"
+                @click="goTo('/life-long-learning-course-index')"
               >
                 <v-list-item
                   class="rounded-lg"
                   :class="
-                    $route.path === '/life-long-learing-course-index'
+                    $route.path === '/life-long-learning-course-index'
                       ? 'active-item'
                       : ''
                   "

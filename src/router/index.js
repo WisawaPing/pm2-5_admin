@@ -45,11 +45,6 @@ const routes = [
         name: "InnovationAddType",
         component: () => import("@/views/InnovationAddType.vue"),
       },
-      {
-        path: "innovation-edit-type",
-        name: "InnovationEditType",
-        component: () => import("@/views/InnovationEditType.vue"),
-      },
 
       // ชุมชนวิถีคาร์บอนต่ำ
       {
@@ -67,11 +62,6 @@ const routes = [
         name: "CarbonLowAddType",
         component: () => import("@/views/CarbonLowAddType.vue"),
       },
-      {
-        path: "carbon-low-edit-type",
-        name: "CarbonLowEditType",
-        component: () => import("@/views/CarbonLowEditType.vue"),
-      },
 
       // เครือข่าย
       {
@@ -82,25 +72,22 @@ const routes = [
 
       // life-long-learning
       {
-        path: "life-long-learing-overview",
+        path: "life-long-learning-overview",
         name: "LifeLongLerningOverview",
         component: () => import("@/views/LifeLongLerningOverview.vue"),
       },
       {
-        path: "life-long-learing-course-index",
+        path: "life-long-learning-course-index",
         name: "LifeLongLerningCourseIndex",
         component: () => import("@/views/LifeLongLerningCourseIndex.vue"),
       },
       {
-        path: "life-long-learing-course",
+        path: "life-long-learning-course",
         name: "LifeLongLerningCourse",
         component: () => import("@/views/LifeLongLerningCourse.vue"),
       },
-      {
-        path: "life-long-learing-course-edit",
-        name: "LifeLongLerningCourseEdit",
-        component: () => import("@/views/LifeLongLerningCourseEdit.vue"),
-      },
+
+      // ติดต่อเรา
       {
         path: "contact",
         name: "Contact",

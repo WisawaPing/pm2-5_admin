@@ -13,7 +13,6 @@
       <h3 class="section-title">รูปภาพ Banner</h3>
       <v-file-input
         v-model="bannerImage"
-        label="เลือกภาพ Banner"
         accept="image/*"
         variant="outlined"
         dense
@@ -24,6 +23,13 @@
 
     <!-- ข้อความ Banner -->
     <v-card class="mb-8 pa-6 text-card" elevation="4">
+      <h3 class="section-title">หัวข้อ Banner</h3>
+      <v-text-field
+        v-model="bannerTitle"
+        variant="outlined"
+        rounded
+        placeholder="พิมพ์หัวข้อ Banner ที่นี่..."
+      ></v-text-field>
       <h3 class="section-title">ข้อความ Banner</h3>
       <v-textarea
         v-model="bannerText"
@@ -104,10 +110,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import {
+  getCommunityOverview,
+  updateCommunityOverview,
+} from "@/api/communityOverview";
 
+const bannerTitle = ref("");
 const bannerText = ref("");
-const bannerImage = ref(null);
+const bannerImage = ref("");
 
 const community = ref({
   carbonStorage: "",
@@ -115,17 +126,63 @@ const community = ref({
   lessLink: "",
   webLink: "",
   excelLink: "",
+  id: null, // id ของ record
 });
 
-const saveCommunity = () => {
-  console.log("บันทึกข้อมูลชุมชน:", {
+// โหลดข้อมูล
+const load = async () => {
+  const res = await getCommunityOverview();
+  console.log(res);
+
+  if (res.response_status === "SUCCESS") {
+    const d = res.data || {};
+    bannerTitle.value = d.bannerTitle || "";
+    bannerText.value = d.bannerText || "";
+    bannerImage.value = d.bannerImage || "";
+    community.value = {
+      id: d.id || null,
+      carbonStorage: d.carbonStorage || "",
+      carbonEmission: d.carbonEmission || "",
+      lessLink: d.lessLink || "",
+      webLink: d.webLink || "",
+      excelLink: d.excelLink || "",
+    };
+  } else {
+    console.error("Load community overview error:", res.message);
+  }
+};
+
+onMounted(load);
+
+// บันทึกข้อมูล
+const saveCommunity = async () => {
+  const payload = {
+    bannerTitle: bannerTitle.value,
     bannerText: bannerText.value,
     bannerImage: bannerImage.value,
-    ...community.value,
-  });
-  alert("บันทึกข้อมูลเรียบร้อย!");
+    carbonStorage: community.value.carbonStorage,
+    carbonEmission: community.value.carbonEmission,
+    lessLink: community.value.lessLink,
+    webLink: community.value.webLink,
+    excelLink: community.value.excelLink,
+  };
+
+  try {
+    const res = await updateCommunityOverview(payload); // ใช้ update แค่ record เดียว
+    if (res.response_status === "SUCCESS") {
+      community.value.id = res.data.id; // เก็บ id เผื่อใช้ในอนาคต
+      alert("✅ บันทึกข้อมูลทั้งหมดเรียบร้อย!");
+    } else {
+      alert(res.message || "บันทึกไม่สำเร็จ");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("เกิดข้อผิดพลาด");
+  }
 };
 </script>
+
+
 
 <style scoped>
 .title {

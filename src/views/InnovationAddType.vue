@@ -1,9 +1,9 @@
 <template>
   <v-container fluid class="pa-6">
     <h1 class="mb-6 title d-flex justify-space-between align-center">
-      จัดการข้อมูลนวัตกรรมการรับมือจากภัยฝุ่น PM2.5
-      <!-- ปุ่มบันทึกมุมขวาบน -->
-      <v-btn color="success" rounded @click="saveInnovation">
+      จัดการข้อมูลประเภทนวัตกรรมการต่างๆ
+
+      <v-btn v-if="!isView" color="success" rounded @click="saveInnovation">
         <v-icon start>mdi-content-save</v-icon>
         บันทึกทั้งหมด
       </v-btn>
@@ -24,7 +24,8 @@
         dense
         rounded
         prepend-icon="mdi-pencil"
-      ></v-autocomplete>
+        :disabled="isView"
+      />
     </v-card>
 
     <!-- ข้อมูลหัวข้อหลัก -->
@@ -39,7 +40,8 @@
             dense
             rounded
             prepend-icon="mdi-pencil"
-          ></v-text-field>
+            :disabled="isView"
+          />
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field
@@ -49,18 +51,26 @@
             dense
             rounded
             prepend-icon="mdi-map-marker"
-          ></v-text-field>
+            :disabled="isView"
+          />
         </v-col>
         <v-col cols="12">
           <v-file-input
-            v-model="innovation.planImage"
+            v-model="innovation.planImageFile"
             label="ภาพแผนผัง"
             accept="image/*"
             variant="outlined"
             dense
             show-size
             prepend-icon="mdi-image"
-          ></v-file-input>
+            :disabled="isView"
+          />
+          <v-img
+            v-if="innovation.planImage"
+            :src="innovation.planImage"
+            max-width="300"
+            class="mt-2"
+          />
         </v-col>
       </v-row>
     </v-card>
@@ -77,7 +87,8 @@
             variant="outlined"
             auto-grow
             rounded
-          ></v-textarea>
+            :disabled="isView"
+          />
         </v-col>
         <v-col cols="12" md="6">
           <v-textarea
@@ -87,7 +98,8 @@
             variant="outlined"
             auto-grow
             rounded
-          ></v-textarea>
+            :disabled="isView"
+          />
         </v-col>
         <v-col cols="12" md="6">
           <v-textarea
@@ -97,7 +109,8 @@
             variant="outlined"
             auto-grow
             rounded
-          ></v-textarea>
+            :disabled="isView"
+          />
         </v-col>
         <v-col cols="12" md="6">
           <v-textarea
@@ -107,7 +120,8 @@
             variant="outlined"
             auto-grow
             rounded
-          ></v-textarea>
+            :disabled="isView"
+          />
         </v-col>
       </v-row>
     </v-card>
@@ -116,7 +130,7 @@
     <v-card class="mb-8 pa-6 text-card" elevation="4">
       <h3 class="section-title">แกลลอรี่</h3>
       <v-file-input
-        v-model="innovation.gallery"
+        v-model="innovation.galleryFiles"
         label="อัพโหลดรูปภาพหลายรูป"
         accept="image/*"
         multiple
@@ -124,7 +138,16 @@
         dense
         show-size
         prepend-icon="mdi-image-multiple"
-      ></v-file-input>
+        :disabled="isView"
+      />
+      <v-row
+        v-if="innovation.gallery && innovation.gallery.length > 0"
+        class="mt-2"
+      >
+        <v-col v-for="(img, i) in innovation.gallery" :key="i" cols="auto">
+          <v-img :src="img" max-width="100" max-height="100" />
+        </v-col>
+      </v-row>
     </v-card>
 
     <!-- วีดีโอแนะนำ -->
@@ -137,11 +160,12 @@
         dense
         rounded
         prepend-icon="mdi-video"
-      ></v-text-field>
+        :disabled="isView"
+      />
     </v-card>
 
     <!-- ปุ่มบันทึกมุมขวาล่าง -->
-    <div class="d-flex justify-end mt-4">
+    <div class="d-flex justify-end mt-4" v-if="!isView">
       <v-btn color="success" rounded @click="saveInnovation">
         <v-icon start>mdi-content-save</v-icon>
         บันทึกทั้งหมด
@@ -151,27 +175,65 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import {
+  createInnovationType,
+  getInnovationTypeById,
+  updateInnovationType,
+} from "@/api/innovationType";
+
 const router = useRouter();
+const route = useRoute();
 
 const innovation = ref({
   type: "",
   title: "",
   location: "",
-  planImage: null,
+  planImage: "", // URL ของภาพเดิม
+  planImageFile: null, // ไฟล์ใหม่ถ้ามี
   context: "",
   process: "",
   results: "",
   training: "",
-  gallery: [],
+  gallery: [], // URL ของภาพเดิม
+  galleryFiles: [], // ไฟล์ใหม่ถ้าอัปโหลด
   videoLink: "",
 });
 
-const saveInnovation = () => {
-  console.log("บันทึกนวัตกรรม PM2.5:", innovation.value);
-  alert("บันทึกข้อมูลเรียบร้อย!");
-  router.push("/innovation-add-type-index");
+const isView = ref(false);
+const isEdit = ref(false);
+
+onMounted(async () => {
+  const id = route.query.id;
+  isView.value = route.query.view === "true";
+  isEdit.value = !!id;
+
+  if (id) {
+    try {
+      const res = await getInnovationTypeById(id);
+      Object.assign(innovation.value, res.data);
+    } catch (err) {
+      console.error(err);
+      alert("ไม่สามารถดึงข้อมูลได้");
+    }
+  }
+});
+
+const saveInnovation = async () => {
+  try {
+    const payload = { ...innovation.value };
+    if (isEdit.value) {
+      await updateInnovationType(route.query.id, payload);
+    } else {
+      await createInnovationType(payload);
+    }
+    alert("บันทึกข้อมูลเรียบร้อย!");
+    router.push("/innovation-add-type-index");
+  } catch (err) {
+    console.error(err);
+    alert("เกิดข้อผิดพลาดในการบันทึก");
+  }
 };
 </script>
 

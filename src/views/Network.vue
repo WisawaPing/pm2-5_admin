@@ -196,27 +196,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { getAcademicNetwork, saveAcademicNetwork } from "@/api/academicNetwork";
 
 const network = ref({
   bannerTitle: "",
   bannerText: "",
   bannerImage: null,
   introText: "",
-  networks: [
-    {
-      region: "",
-      image: null,
-      province: "",
-      teamImage: null,
-      pilotAreas: [
-        {
-          location: "",
-          image: null,
-        },
-      ],
-    },
-  ],
+  networks: [],
 });
 
 const regions = [
@@ -227,6 +215,16 @@ const regions = [
   "ภาคตะวันตก",
   "ภาคใต้",
 ];
+
+// โหลดข้อมูลจาก backend
+onMounted(async () => {
+  const res = await getAcademicNetwork();
+  console.log("res.data", res.data);
+
+  if (res && res.response_status === "SUCCESS" && res.data) {
+    network.value = res.data;
+  }
+});
 
 // ฟังก์ชันจัดการ loop
 const addNetwork = () => {
@@ -254,12 +252,17 @@ const removePilotArea = (networkIndex, pilotIndex) => {
   network.value.networks[networkIndex].pilotAreas.splice(pilotIndex, 1);
 };
 
-// บันทึกทั้งหมด
-const saveNetwork = () => {
-  console.log("ข้อมูลเครือข่ายวิชาการ:", network.value);
-  alert("บันทึกข้อมูลเรียบร้อย!");
+// บันทึกข้อมูล
+const saveNetwork = async () => {
+  const res = await saveAcademicNetwork(network.value);
+  if (res.response_status === "ERROR") {
+    alert("❌ บันทึกไม่สำเร็จ: " + res.message);
+  } else {
+    alert("✅ บันทึกข้อมูลทั้งหมดเรียบร้อย!");
+  }
 };
 </script>
+
 
 <style scoped>
 .title {

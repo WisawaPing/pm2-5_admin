@@ -45,16 +45,38 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import {
+  getLifeLongLearningBanner,
+  saveLifeLongLearningBanner,
+} from "@/api/lifeLongLearningBanner";
 
 const bannerText = ref("");
 const bannerImage = ref(null);
 
+// โหลดข้อมูลเมื่อเปิดหน้า
+onMounted(async () => {
+  const res = await getLifeLongLearningBanner();
+  if (res && res.id) {
+    bannerText.value = res.bannerText || "";
+    bannerImage.value = res.bannerImage || null;
+  }
+});
+
 // ฟังก์ชันบันทึกทั้งหมด
-const saveAll = () => {
-  console.log("Banner Text:", bannerText.value);
-  console.log("Banner Image:", bannerImage.value);
-  alert("บันทึกข้อมูลทั้งหมดเรียบร้อย!");
+const saveAll = async () => {
+  const payload = {
+    bannerText: bannerText.value,
+    bannerImage: bannerImage.value,
+  };
+
+  const res = await saveLifeLongLearningBanner(payload);
+
+  if (res.response_status === "ERROR") {
+    alert("❌ บันทึกไม่สำเร็จ: " + res.message);
+  } else {
+    alert("✅ บันทึกข้อมูลทั้งหมดเรียบร้อย!");
+  }
 };
 </script>
 
@@ -84,5 +106,3 @@ const saveAll = () => {
   box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
 }
 </style>
-
-

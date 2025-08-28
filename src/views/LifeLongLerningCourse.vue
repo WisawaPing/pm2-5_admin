@@ -1,191 +1,166 @@
 <template>
   <v-container fluid>
-    <h1 class="mb-4">จัดการข้อมูลหลักสูตรของเรา Life Long Learning</h1>
+    <h1 class="mb-4">
+      {{ isView ? "ดูข้อมูลหลักสูตร" : "จัดการข้อมูลหลักสูตร" }}
+    </h1>
+
+    <div v-if="!isView" class="text-end mb-6">
+      <v-btn @click="router.go(-1)">กลับ</v-btn>
+      &emsp;
+      <v-btn color="success" @click="saveCourse">บันทึกข้อมูลหลักสูตร</v-btn>
+    </div>
 
     <v-form>
-      <!-- ชื่อหลักสูตร -->
       <v-text-field
         v-model="course.name"
         label="ชื่อหลักสูตร"
+        :readonly="isView"
+        class="mb-4"
         variant="outlined"
         rounded
-        class="mb-4"
       />
-
-      <!-- อัปโหลดภาพหลักสูตร -->
-      <v-file-input
-        v-model="course.image"
-        label="อัปโหลดภาพหลักสูตร"
-        accept="image/*"
-        variant="outlined"
-        class="mb-4"
-        prepend-icon="mdi-image"
-      />
-
-      <!-- คำอธิบาย -->
       <v-textarea
         v-model="course.description"
         label="คำอธิบายหลักสูตร"
+        :readonly="isView"
+        class="mb-4"
         variant="outlined"
         rounded
-        class="mb-4"
       />
-
-      <!-- ระยะเวลาเรียน -->
       <v-text-field
         v-model="course.duration"
         label="ระยะเวลาเรียน (รวม)"
+        :readonly="isView"
+        class="mb-4"
         variant="outlined"
         rounded
-        class="mb-4"
       />
 
-      <!-- หัวข้อบทเรียน -->
       <h2 class="text-h6 mb-2">หัวข้อของบทเรียน</h2>
       <v-expansion-panels multiple>
         <v-expansion-panel
           v-for="(lesson, lIndex) in course.lessons"
           :key="lIndex"
         >
-          <v-expansion-panel-title>
-            {{ lesson.title || `หัวข้อบทเรียนที่ ${lIndex + 1}` }}
-          </v-expansion-panel-title>
+          <v-expansion-panel-title>{{
+            lesson.title || `หัวข้อบทเรียนที่ ${lIndex + 1}`
+          }}</v-expansion-panel-title>
           <v-expansion-panel-text>
             <v-text-field
               v-model="lesson.title"
               label="ชื่อหัวข้อบทเรียน"
+              :readonly="isView"
+              class="mb-4"
               variant="outlined"
               rounded
-              class="mb-4"
             />
 
-            <!-- เนื้อหาในบทเรียน -->
             <h3 class="text-subtitle-1 mb-2">เนื้อหา</h3>
             <v-card
               v-for="(content, cIndex) in lesson.contents"
               :key="cIndex"
               class="mb-3 pa-3"
-              variant="outlined"
-              rounded="xl"
             >
               <v-text-field
                 v-model="content.detailTitle"
                 label="หัวข้อรายละเอียด"
+                :readonly="isView"
+                class="mb-3"
                 variant="outlined"
                 rounded
-                class="mb-3"
               />
               <v-textarea
                 v-model="content.detail"
                 label="รายละเอียด"
+                :readonly="isView"
+                class="mb-3"
                 variant="outlined"
                 rounded
-                class="mb-3"
               />
               <v-text-field
                 v-model="content.duration"
                 label="ระยะเวลา"
+                :readonly="isView"
+                class="mb-3"
                 variant="outlined"
                 rounded
-                class="mb-3"
               />
               <v-text-field
                 v-model="content.speaker"
                 label="ผู้บรรยาย"
+                :readonly="isView"
+                class="mb-3"
                 variant="outlined"
                 rounded
-                class="mb-3"
               />
               <v-text-field
                 v-model="content.speakerGroup"
                 label="คณะของผู้บรรยาย"
+                :readonly="isView"
+                class="mb-3"
                 variant="outlined"
                 rounded
-                class="mb-3"
               />
 
-              <div class="text-right">
-                <v-btn
-                  color="error"
-                  variant="tonal"
-                  rounded
-                  @click="removeContent(lIndex, cIndex)"
+              <div v-if="!isView" class="text-right">
+                <v-btn color="error" @click="removeContent(lIndex, cIndex)"
+                  >ลบเนื้อหา</v-btn
                 >
-                  ลบเนื้อหา
-                </v-btn>
               </div>
             </v-card>
 
-            <v-btn
-              color="primary"
-              variant="tonal"
-              rounded
-              prepend-icon="mdi-plus"
-              @click="addContent(lIndex)"
+            <v-btn v-if="!isView" color="primary" @click="addContent(lIndex)"
+              >เพิ่มเนื้อหา</v-btn
             >
-              เพิ่มเนื้อหา
-            </v-btn>
-
-            <div class="text-right mt-4">
-              <v-btn
-                color="error"
-                variant="flat"
-                rounded
-                @click="removeLesson(lIndex)"
+            <div v-if="!isView" class="text-right mt-4">
+              <v-btn color="error" @click="removeLesson(lIndex)"
+                >ลบหัวข้อบทเรียน</v-btn
               >
-                ลบหัวข้อบทเรียน
-              </v-btn>
             </div>
           </v-expansion-panel-text>
         </v-expansion-panel>
       </v-expansion-panels>
 
-      <v-btn
-        color="primary"
-        variant="flat"
-        rounded
-        prepend-icon="mdi-plus"
-        class="mt-4"
-        @click="addLesson"
+      <v-btn v-if="!isView" color="primary" @click="addLesson" class="mt-4"
+        >เพิ่มหัวข้อบทเรียน</v-btn
       >
-        เพิ่มหัวข้อบทเรียน
-      </v-btn>
 
-      <!-- เกณฑ์การวัดผล -->
       <v-textarea
         v-model="course.evaluation"
         label="เกณฑ์การวัดผล"
+        :readonly="isView"
+        class="mt-6"
         variant="outlined"
         rounded
-        class="mt-6"
       />
-
-      <!-- ลิ้งค์ดาวน์โหลด -->
       <v-text-field
         v-model="course.downloadLink"
         label="ลิ้งค์ดาวน์โหลดคู่มือประกอบหลักสูตร"
+        :readonly="isView"
+        class="mt-4"
         variant="outlined"
         rounded
-        class="mt-4"
-        prepend-icon="mdi-link"
       />
 
-      <!-- Save Button -->
-      <div class="text-center mt-6">
-        <v-btn color="success" rounded size="large">
-          บันทึกข้อมูลหลักสูตร
-        </v-btn>
+      <div v-if="!isView" class="text-end mt-6">
+        <v-btn @click="router.go(-1)">กลับ</v-btn>
+        &emsp;
+        <v-btn color="success" @click="saveCourse">บันทึกข้อมูลหลักสูตร</v-btn>
       </div>
     </v-form>
   </v-container>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { getCourseById, createCourse, updateCourse } from "@/api/course.js";
+
+const route = useRoute();
+const router = useRouter();
 
 const course = ref({
   name: "",
-  image: null,
   description: "",
   duration: "",
   lessons: [],
@@ -193,11 +168,19 @@ const course = ref({
   downloadLink: "",
 });
 
+const isView = ref(false);
+const courseId = route.query.id;
+
+onMounted(async () => {
+  if (courseId) {
+    const res = await getCourseById(courseId);
+    course.value = res.data;
+    isView.value = route.query.view === "true";
+  }
+});
+
 const addLesson = () => {
-  course.value.lessons.push({
-    title: "",
-    contents: [],
-  });
+  course.value.lessons.push({ title: "", contents: [] });
 };
 
 const removeLesson = (index) => {
@@ -216,5 +199,21 @@ const addContent = (lessonIndex) => {
 
 const removeContent = (lessonIndex, contentIndex) => {
   course.value.lessons[lessonIndex].contents.splice(contentIndex, 1);
+};
+
+const saveCourse = async () => {
+  try {
+    // ส่ง course.value ทั้ง object โดยตรง
+    if (courseId) {
+      await updateCourse(courseId, course.value);
+    } else {
+      await createCourse(course.value);
+    }
+    alert("✅ บันทึกข้อมูลทั้งหมดเรียบร้อย!");
+    router.push("/life-long-learning-course-index");
+  } catch (err) {
+    console.error(err);
+    alert("เกิดข้อผิดพลาด");
+  }
 };
 </script>

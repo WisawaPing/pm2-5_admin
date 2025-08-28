@@ -98,23 +98,40 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { getAbout, updateAbout } from "@/api/about";
 
-// ข้อความหัวข้อหลัก
 const bannerText = ref("");
-
-// ข้อความรายละเอียดระยะที่ ...
 const newsList = ref([{ location: "", description: "" }]);
+const timelineImage = ref("");
 
-// ฟังก์ชัน
+onMounted(async () => {
+  const res = await getAbout();
+  if (res.response_status === "SUCCESS") {
+    const data = res.data;
+    bannerText.value = data.bannerText || "";
+    newsList.value = Array.isArray(data.newsList) ? data.newsList : [];
+    timelineImage.value = data.timelineImage || "";
+  } else {
+    alert(res.message || "ไม่สามารถโหลดข้อมูลได้");
+  }
+});
+
 const addNews = () => newsList.value.push({ location: "", description: "" });
 const removeNews = (index) => newsList.value.splice(index, 1);
 
-// ฟังก์ชันบันทึกทั้งหมด
-const saveAll = () => {
-  console.log("Banner:", bannerText.value);
-  console.log("รายละเอียดระยะ:", newsList.value);
-  alert("บันทึกข้อมูลทั้งหมดเรียบร้อย!");
+const saveAll = async () => {
+  const res = await updateAbout({
+    bannerText: bannerText.value,
+    newsList: newsList.value,
+    timelineImage: timelineImage.value,
+  });
+
+  if (res.response_status === "SUCCESS") {
+    alert("✅ บันทึกข้อมูลทั้งหมดเรียบร้อย!");
+  } else {
+    alert(res.message || "บันทึกไม่สำเร็จ");
+  }
 };
 </script>
 

@@ -5,13 +5,9 @@
     <v-row class="align-center mb-4">
       <v-col cols="12" md="6">
         <v-autocomplete
+          v-model="filterType"
           label="ค้นหาประเภท"
-          :items="[
-            'ทั้งหมด',
-            'โครงการด้านป่าไม้และการเกษตร (Forest/Agriculture)',
-            'โครงการด้านการจัดการของเสีย (Waste)',
-            'โครงการด้านพลังงาน (Energy)',
-          ]"
+          :items="['ทั้งหมด', ...types]"
           variant="outlined"
           dense
           clearable
@@ -32,16 +28,15 @@
       </v-col>
     </v-row>
 
-    <!-- ตารางแบบ clean พร้อม pagination -->
     <v-data-table
       :headers="headers"
-      :items="innovationList"
+      :items="filteredList"
       item-key="id"
       class="innovation-table elevation-1 mt-4"
       dense
       :items-per-page="10"
     >
-      <!-- Actions: icon-only -->
+      <!-- Actions -->
       <template #item.actions="{ item }">
         <v-row class="justify-center" dense>
           <v-col cols="auto">
@@ -66,7 +61,7 @@
             <v-icon
               color="red"
               class="action-icon"
-              @click="deleteInnovation(item.id)"
+              @click="deleteCommunity(item.id)"
             >
               mdi-delete
             </v-icon>
@@ -74,11 +69,11 @@
         </v-row>
       </template>
 
-      <!-- แสดง gallery เป็น chip -->
-      <template #item.gallery="{ item }">
+      <!-- แสดง activityImages เป็น chip -->
+      <template #item.activityImages="{ item }">
         <v-chip-group class="d-flex flex-wrap" column>
           <v-chip
-            v-for="(img, i) in item.gallery"
+            v-for="(img, i) in item.activityImages"
             :key="i"
             small
             outlined
@@ -90,10 +85,10 @@
         </v-chip-group>
       </template>
 
-      <!-- แสดง planImage -->
-      <template #item.planImage="{ item }">
+      <!-- แสดง workflowImage -->
+      <template #item.workflowImage="{ item }">
         <v-avatar size="36">
-          <v-img :src="item.planImage" />
+          <v-img :src="item.workflowImage" />
         </v-avatar>
       </template>
     </v-data-table>
@@ -101,51 +96,66 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
-const router = useRouter();
+import { getCommunityTypes, deleteCommunityType } from "@/api/communityType";
 
-const innovationList = ref([
-  {
-    id: 1,
-    type: "นวัตกรรมการรับมือจากภัยฝุ่น PM2.5",
-    title: "โครงการทดสอบ 1",
-    location: "เชียงใหม่",
-    planImage: "https://via.placeholder.com/150",
-    gallery: [
-      "https://via.placeholder.com/100",
-      "https://via.placeholder.com/101",
-    ],
-    videoLink: "https://youtube.com/example1",
-  },
-]);
+const router = useRouter();
+const communityList = ref([]);
+const filterType = ref("");
+const types = [
+  "โครงการด้านป่าไม้และการเกษตร (Forest/Agriculture)",
+  "โครงการด้านการจัดการของเสีย (Waste)",
+  "โครงการด้านพลังงาน (Energy)",
+];
 
 const headers = [
   { title: "ประเภท", key: "type" },
   { title: "ชื่อหัวข้อ", key: "title" },
   { title: "สถานที่ตั้ง", key: "location" },
-  { title: "ภาพแผนผัง", key: "planImage" },
-  { title: "แกลลอรี่", key: "gallery" },
-  { title: "วีดีโอ", key: "videoLink" },
+  // { title: "ผังการทำงาน", key: "workflowImage" },
+  // { title: "ภาพกิจกรรม", key: "activityImages" },
   { title: "Actions", key: "actions", sortable: false },
 ];
 
-const deleteInnovation = (id) => {
-  if (confirm("คุณต้องการลบข้อมูลนี้หรือไม่?")) {
-    innovationList.value = innovationList.value.filter((i) => i.id !== id);
+const fetchCommunityList = async () => {
+  const res = await getCommunityTypes();
+  if (res.response_status !== "ERROR") {
+    communityList.value = res.data || [];
+  } else {
+    alert(res.message);
   }
 };
 
-const goToAdd = async () => {
+const deleteCommunity = async (id) => {
+  if (confirm("คุณต้องการลบข้อมูลนี้หรือไม่?")) {
+    const res = await deleteCommunityType(id);
+    if (res.response_status !== "ERROR") {
+      communityList.value = communityList.value.filter((i) => i.id !== id);
+    } else {
+      alert(res.message);
+    }
+  }
+};
+
+const goToAdd = () => {
   router.push("/carbon-low-add-type");
 };
 
-const goToEdit = async (item, isView) => {
+const goToEdit = (item, isView) => {
   router.push({
-    path: "/carbon-low-edit-type",
+    path: "/carbon-low-add-type",
     query: { id: item.id, view: isView },
   });
 };
+
+onMounted(fetchCommunityList);
+
+const filteredList = computed(() => {
+  if (!filterType.value || filterType.value === "ทั้งหมด")
+    return communityList.value;
+  return communityList.value.filter((c) => c.type === filterType.value);
+});
 </script>
 
 <style scoped>
@@ -154,7 +164,6 @@ const goToEdit = async (item, isView) => {
   font-weight: 700;
 }
 
-/* ตาราง clean */
 .innovation-table {
   border-radius: 12px;
   overflow: hidden;

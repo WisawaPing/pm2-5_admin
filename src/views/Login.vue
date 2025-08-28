@@ -1,28 +1,48 @@
 <template>
   <v-app>
     <v-main>
-      <v-container class="fill-height" fluid>
-        <v-row align="center" justify="center">
-          <v-col cols="12" sm="6" md="4">
-            <v-card>
-              <v-card-title class="text-h5">เข้าสู่ระบบ</v-card-title>
-              <v-card-text>
-                <v-form @submit.prevent="login">
-                  <v-text-field v-model="username" label="Username" required />
-                  <v-text-field
-                    v-model="password"
-                    label="Password"
-                    type="password"
-                    required
-                  />
-                  <v-btn type="submit" color="primary" class="mt-4" block>
-                    เข้าสู่ระบบ
-                  </v-btn>
-                </v-form>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
+      <v-container class="fill-height d-flex align-center justify-center" fluid>
+        <v-col cols="12" sm="6" md="4">
+          <v-card class="pa-6 rounded-lg elevation-6">
+            <v-card-title class="text-h5 justify-center"
+              >เข้าสู่ระบบ</v-card-title
+            >
+            <v-card-text>
+              <v-form @submit.prevent="login">
+                <v-text-field
+                  v-model="username"
+                  label="Username"
+                  variant="outlined"
+                  rounded
+                  prepend-icon="mdi-account"
+                  dense
+                  required
+                />
+                <v-text-field
+                  v-model="password"
+                  label="Password"
+                  type="password"
+                  variant="outlined"
+                  rounded
+                  prepend-icon="mdi-lock"
+                  dense
+                  required
+                  class="mt-4"
+                />
+                <v-btn
+                  type="submit"
+                  color="primary"
+                  class="mt-6"
+                  block
+                  rounded
+                  elevation="2"
+                >
+                  เข้าสู่ระบบ
+                </v-btn>
+              </v-form>
+            </v-card-text>
+          </v-card>
+        </v-col>
       </v-container>
     </v-main>
   </v-app>
@@ -31,43 +51,35 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { loginUser } from "@/api/user";
 
 const username = ref("");
 const password = ref("");
 const router = useRouter();
 
 const login = async () => {
-  // ❌ ส่วน API คอมเมนต์ไว้ก่อน
-  /*
-  try {
-    const res = await fetch("http://localhost:3000/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: username.value,
-        password: password.value,
-      }),
-    });
-    const data = await res.json();
-    if (data.success) {
-      localStorage.setItem("token", data.token);
-      router.push("/"); // login สำเร็จ
-    } else {
-      alert("Username หรือ Password ไม่ถูกต้อง");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("เกิดข้อผิดพลาด");
-  }
-  */
+  const data = await loginUser(username.value, password.value);
 
-  // ✅ Mock login แบบ admin / 1234
-  if (username.value === "admin" && password.value === "1234") {
-    localStorage.setItem("token", "mock-token"); // เก็บ token ชั่วคราว
+  if (data.response_status === "SUCCESS") {
+    localStorage.setItem("token", data.data.token); // เก็บ JWT
     router.push("/"); // login สำเร็จ
   } else {
-    alert("Username หรือ Password ไม่ถูกต้อง");
+    alert(data.message || "Username หรือ Password ไม่ถูกต้อง");
   }
 };
 </script>
 
+<style scoped>
+.rounded-lg {
+  border-radius: 16px;
+}
+
+.v-card-title {
+  color: #0d2a4f;
+  font-weight: 600;
+}
+
+.v-btn {
+  font-weight: 600;
+}
+</style>

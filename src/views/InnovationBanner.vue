@@ -45,18 +45,39 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import {
+  getInnovationBanner,
+  updateInnovationBanner,
+} from "@/api/innovationBanner";
 
 const bannerText = ref("");
 const bannerImage = ref(null);
 
-// ฟังก์ชันบันทึกทั้งหมด
-const saveAll = () => {
-  console.log("Banner Text:", bannerText.value);
-  console.log("Banner Image:", bannerImage.value);
-  alert("บันทึกข้อมูลทั้งหมดเรียบร้อย!");
+onMounted(async () => {
+  const res = await getInnovationBanner();
+  if (res.response_status === "SUCCESS") {
+    bannerText.value = res.data.bannerText || "";
+    bannerImage.value = res.data.bannerImage || null;
+  } else {
+    alert(res.message || "ไม่สามารถโหลดข้อมูลได้");
+  }
+});
+
+const saveAll = async () => {
+  const res = await updateInnovationBanner({
+    bannerText: bannerText.value,
+    bannerImage: bannerImage.value,
+  });
+
+  if (res.response_status === "SUCCESS") {
+    alert("✅ บันทึกข้อมูลทั้งหมดเรียบร้อย!");
+  } else {
+    alert(res.message || "บันทึกไม่สำเร็จ");
+  }
 };
 </script>
+
 
 <style scoped>
 .title {

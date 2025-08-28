@@ -123,34 +123,76 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { getDashboard, updateDashboard } from "@/api/dashboard";
 
 // Banner
-const bannerText = ref("ข้อความเริ่มต้น Banner");
+const bannerText = ref("");
 
-// ข้อความข้างแผนที่
-const mapCards = ref([
-  { title: "", text: "" },
-  { title: "", text: "" },
-  { title: "", text: "" },
-  { title: "", text: "" },
-]);
+// Map Cards
+const mapCards = ref([]);
 
-// ข่าวสารและกิจกรรม
-const newsList = ref([{ title: "", description: "" }]);
+// News List
+const newsList = ref([]);
 
-// ฟังก์ชัน
-const addNews = () => newsList.value.push({ title: "", description: "" });
+// โหลดข้อมูลตอนเปิดหน้า
+onMounted(async () => {
+  const res = await getDashboard();
+  if (res.response_status === "SUCCESS") {
+    const data = res.data;
+
+    bannerText.value = data.bannerText || "";
+
+    // แปลง mapCards ถ้าเป็น string
+    let cards = data.mapCards || [];
+    if (typeof cards === "string") {
+      try {
+        cards = JSON.parse(cards);
+      } catch {
+        cards = [];
+      }
+    }
+    // สร้าง array 4 object ใหม่ถ้าไม่พอ
+    mapCards.value = Array(4)
+      .fill(0)
+      .map((_, i) => cards[i] || { title: "", text: "" });
+
+    // แปลง newsList ถ้าเป็น string
+    let news = data.newsList || [];
+    if (typeof news === "string") {
+      try {
+        news = JSON.parse(news);
+      } catch {
+        news = [];
+      }
+    }
+    newsList.value = news;
+  } else {
+    alert(res.message || "ไม่สามารถโหลดข้อมูลได้");
+  }
+});
+
+// ฟังก์ชันจัดการข่าวสาร
+const addNews = () =>
+  newsList.value.push({ title: "", description: "", image: null });
 const removeNews = (index) => newsList.value.splice(index, 1);
 
-// ฟังก์ชันบันทึกทั้งหมด
-const saveAll = () => {
-  console.log("Banner:", bannerText.value);
-  console.log("Map Cards:", mapCards.value);
-  console.log("News List:", newsList.value);
-  alert("บันทึกข้อมูลทั้งหมดเรียบร้อย!");
+// บันทึกทั้งหมด
+const saveAll = async () => {
+  const res = await updateDashboard({
+    bannerText: bannerText.value,
+    mapCards: mapCards.value,
+    newsList: newsList.value,
+  });
+
+  if (res.response_status === "SUCCESS") {
+    alert("✅ บันทึกข้อมูลทั้งหมดเรียบร้อย!");
+  } else {
+    alert(res.message || "บันทึกไม่สำเร็จ");
+  }
 };
 </script>
+
 
 <style scoped>
 .title {

@@ -71,19 +71,39 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { getContact, updateContact } from "@/api/contact";
 
 const form = ref({
-  projectName:
-    "โครงการด้านการรู้รับปรับตัวจากภัยฝุ่น PM2.5 (PM2.5 Resilience Project)",
-  department: "ภาควิชาภูมิศาสตร์ คณะสังคมศาสตร์ มหาวิทยาลัยเชียงใหม่",
-  address: "239 ถ.ห้วยแก้ว ต.สุเทพ อ.เมือง เชียงใหม่ 50200",
-  phone: "053-943562",
-  email: "SSSCMU123@GMAIL.COM",
+  projectName: "",
+  department: "",
+  address: "",
+  phone: "",
+  email: "",
 });
 
-const saveForm = () => {
-  console.log("บันทึกข้อมูล", form.value);
-  // TODO: call API บันทึกข้อมูล
+const loadContact = async () => {
+  const res = await getContact();
+  if (res.response_status === "SUCCESS") {
+    form.value = { ...form.value, ...res.data };
+  } else {
+    console.error("Load contact error:", res.message);
+  }
+};
+
+onMounted(loadContact);
+
+const saveForm = async () => {
+  try {
+    const res = await updateContact(form.value);
+    if (res.response_status === "SUCCESS") {
+      alert("บันทึกข้อมูลเรียบร้อย");
+    } else {
+      alert(res.message || "บันทึกไม่สำเร็จ");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("เกิดข้อผิดพลาด");
+  }
 };
 </script>
