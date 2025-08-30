@@ -4,6 +4,7 @@
 
     <v-card class="pa-6 rounded-xl" outlined>
       <v-form>
+        <!-- ข้อมูลทั่วไป -->
         <v-row dense>
           <v-col cols="12">
             <v-text-field
@@ -53,8 +54,75 @@
           </v-col>
         </v-row>
 
-        <v-divider class="my-6"></v-divider>
+        <v-divider class="my-8"></v-divider>
 
+        <!-- ข้อมูล Social Media -->
+        <h2 class="mb-4">ลิ้งค์โซเชียลมีเดีย</h2>
+        <v-row dense>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="form.facebook"
+              label="Facebook"
+              variant="outlined"
+              rounded
+              prepend-inner-icon="mdi-facebook"
+            />
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="form.twitter"
+              label="Twitter / X"
+              variant="outlined"
+              rounded
+              prepend-inner-icon="mdi-twitter"
+            />
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="form.line"
+              label="Line"
+              variant="outlined"
+              rounded
+              prepend-inner-icon="mdi-line-scan"
+            />
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="form.tiktok"
+              label="TikTok"
+              variant="outlined"
+              rounded
+              prepend-inner-icon="mdi-music"
+            />
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="form.instagram"
+              label="Instagram"
+              variant="outlined"
+              rounded
+              prepend-inner-icon="mdi-instagram"
+            />
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="form.website"
+              label="Website"
+              variant="outlined"
+              rounded
+              prepend-inner-icon="mdi-web"
+            />
+          </v-col>
+        </v-row>
+
+        <v-divider class="my-8"></v-divider>
+
+        <!-- ปุ่มบันทึก -->
         <div class="text-end">
           <v-btn
             color="primary"
@@ -80,6 +148,11 @@ const form = ref({
   address: "",
   phone: "",
   email: "",
+  facebook: "",
+  twitter: "",
+  line: "",
+  tiktok: "",
+  instagram: "",
 });
 
 const loadContact = async () => {
