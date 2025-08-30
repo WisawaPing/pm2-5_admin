@@ -12,7 +12,9 @@
     ></v-file-input>
 
     <!-- แสดง preview ถ้าเป็นรูป -->
-    <v-img v-if="imageUrl" :src="imageUrl" class="card-image" cover></v-img>
+    <div v-if="imageUrl" class="preview-wrapper">
+      <v-img :src="imageUrl" class="card-image" cover></v-img>
+    </div>
   </div>
 </template>
 
@@ -72,6 +74,19 @@ const uploadFile = async () => {
 </script>
 
 <style scoped>
+.file-uploader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* กึ่งกลางแนวนอน */
+}
+
+.preview-wrapper {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center; /* กึ่งกลางแนวนอน */
+  width: 100%;
+}
+
 .card-image {
   width: 100%;
   max-width: 600px;

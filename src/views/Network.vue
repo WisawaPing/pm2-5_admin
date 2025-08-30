@@ -90,7 +90,7 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="12" md="6">
+              <v-col cols="12" md="12">
                 <FileUploader
                   v-model="item.teamImage"
                   label="อัพโหลดรูปภาพคณะทำงาน"
@@ -107,7 +107,7 @@
                 :key="pIndex"
                 class="mb-3"
               >
-                <v-col cols="12" md="6">
+                <v-col cols="12" md="12">
                   <v-text-field
                     v-model="pilot.location"
                     label="จังหวัด / สถานที่ตั้ง"
@@ -117,7 +117,7 @@
                     prepend-icon="mdi-map-marker"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" md="6">
+                <v-col cols="12" md="12">
                   <FileUploader
                     v-model="pilot.image"
                     label="อัพโหลดรูปภาพ"
