@@ -107,7 +107,8 @@
                 :key="pIndex"
                 class="mb-3"
               >
-                <v-col cols="12" md="12">
+                <!-- ชื่อ / location -->
+                <v-col cols="12" md="6">
                   <v-text-field
                     v-model="pilot.location"
                     label="จังหวัด / สถานที่ตั้ง"
@@ -117,12 +118,18 @@
                     prepend-icon="mdi-map-marker"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" md="12">
-                  <FileUploader
-                    v-model="pilot.image"
-                    label="อัพโหลดรูปภาพ"
-                  ></FileUploader>
+
+                <!-- รูปภาพ -->
+                <v-col cols="12" md="6">
+                  <div class="pilot-image-uploader">
+                    <FileUploader
+                      v-model="pilot.image"
+                      label="อัพโหลดรูปภาพ"
+                    ></FileUploader>
+                  </div>
                 </v-col>
+
+                <!-- ปุ่มลบ -->
                 <v-col cols="12" class="text-right">
                   <v-btn
                     color="error"
@@ -273,5 +280,19 @@ const saveNetwork = async () => {
 .card-item:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.pilot-image-uploader ::v-deep(.preview-wrapper) {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.pilot-image-uploader ::v-deep(.card-image) {
+  width: 100%;
+  max-width: 250px; /* ปรับขนาดตามต้องการ */
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
 }
 </style>
