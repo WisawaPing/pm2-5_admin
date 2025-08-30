@@ -1,6 +1,16 @@
 <template>
   <v-container fluid>
     <h1 class="mb-6">จัดการข้อมูลติดต่อเรา</h1>
+    <div class="text-end mb-6">
+      <v-btn
+        color="success"
+        rounded
+        prepend-icon="mdi-content-save"
+        @click="saveForm"
+      >
+        บันทึกข้อมูล
+      </v-btn>
+    </div>
 
     <v-card class="pa-6 rounded-xl" outlined>
       <v-form>
@@ -125,9 +135,9 @@
         <!-- ปุ่มบันทึก -->
         <div class="text-end">
           <v-btn
-            color="primary"
+            color="success"
+            rounded
             prepend-icon="mdi-content-save"
-            class="rounded-lg px-6"
             @click="saveForm"
           >
             บันทึกข้อมูล

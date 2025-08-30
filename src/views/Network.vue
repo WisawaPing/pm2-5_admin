@@ -4,7 +4,7 @@
       จัดการข้อมูลเครือข่ายวิชาการ
       <v-btn color="success" rounded @click="saveNetwork">
         <v-icon start>mdi-content-save</v-icon>
-        บันทึกทั้งหมด
+        บันทึกข้อมูล
       </v-btn>
     </h1>
 
@@ -169,11 +169,11 @@
       </v-btn>
     </v-card>
 
-    <!-- ปุ่มบันทึกทั้งหมด ด้านล่าง -->
+    <!-- ปุ่มบันทึกข้อมูล ด้านล่าง -->
     <div class="d-flex justify-end mt-4">
       <v-btn color="success" rounded @click="saveNetwork">
         <v-icon start>mdi-content-save</v-icon>
-        บันทึกทั้งหมด
+        บันทึกข้อมูล
       </v-btn>
     </div>
   </v-container>

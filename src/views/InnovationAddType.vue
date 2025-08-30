@@ -2,11 +2,16 @@
   <v-container fluid class="pa-6">
     <h1 class="mb-6 title d-flex justify-space-between align-center">
       จัดการข้อมูลประเภทนวัตกรรมการต่างๆ
+    </h1>
+
+    <div class="text-end mb-6">
+      <v-btn rounded @click="router.go(-1)">กลับ</v-btn>
+      &emsp;
       <v-btn v-if="!isView" color="success" rounded @click="saveInnovation">
         <v-icon start>mdi-content-save</v-icon>
-        บันทึกทั้งหมด
+        บันทึกข้อมูล
       </v-btn>
-    </h1>
+    </div>
 
     <!-- ส่วนเลือกประเภท -->
     <v-card class="mb-8 pa-6 text-card" elevation="4">
@@ -150,10 +155,12 @@
     </v-card>
 
     <!-- ปุ่มบันทึกมุมขวาล่าง -->
-    <div class="d-flex justify-end mt-4" v-if="!isView">
+    <div class="text-end mt-6" v-if="!isView">
+      <v-btn rounded @click="router.go(-1)">กลับ</v-btn>
+      &emsp;
       <v-btn color="success" rounded @click="saveInnovation">
         <v-icon start>mdi-content-save</v-icon>
-        บันทึกทั้งหมด
+        บันทึกข้อมูล
       </v-btn>
     </div>
   </v-container>

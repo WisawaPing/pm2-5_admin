@@ -5,7 +5,7 @@
       <!-- ปุ่มบันทึกมุมขวาบน -->
       <v-btn color="success" rounded @click="saveAll">
         <v-icon start>mdi-content-save</v-icon>
-        บันทึกทั้งหมด
+        บันทึกข้อมูล
       </v-btn>
     </h1>
 
@@ -114,7 +114,7 @@
     <div class="d-flex justify-end mt-4">
       <v-btn color="success" rounded @click="saveAll">
         <v-icon start>mdi-content-save</v-icon>
-        บันทึกทั้งหมด
+        บันทึกข้อมูล
       </v-btn>
     </div>
   </v-container>
@@ -176,7 +176,7 @@ const addNews = () =>
   newsList.value.push({ title: "", description: "", image: null });
 const removeNews = (index) => newsList.value.splice(index, 1);
 
-// บันทึกทั้งหมด
+// บันทึกข้อมูล
 const saveAll = async () => {
   const res = await updateDashboard({
     bannerText: bannerText.value,

@@ -4,10 +4,12 @@
       {{ isView ? "ดูข้อมูลหลักสูตร" : "จัดการข้อมูลหลักสูตร" }}
     </h1>
 
-    <div v-if="!isView" class="text-end mb-6">
-      <v-btn @click="router.go(-1)">กลับ</v-btn>
+    <div class="text-end mb-6">
+      <v-btn rounded @click="router.go(-1)">กลับ</v-btn>
       &emsp;
-      <v-btn color="success" @click="saveCourse">บันทึกข้อมูลหลักสูตร</v-btn>
+      <v-btn v-if="!isView" color="success" rounded @click="saveCourse"
+        >บันทึกข้อมูล</v-btn
+      >
     </div>
 
     <v-form>
@@ -148,10 +150,12 @@
         rounded
       />
 
-      <div v-if="!isView" class="text-end mt-6">
-        <v-btn @click="router.go(-1)">กลับ</v-btn>
+      <div class="text-end mt-6">
+        <v-btn rounded @click="router.go(-1)">กลับ</v-btn>
         &emsp;
-        <v-btn color="success" @click="saveCourse">บันทึกข้อมูลหลักสูตร</v-btn>
+        <v-btn v-if="!isView" color="success" rounded @click="saveCourse"
+          >บันทึกข้อมูล</v-btn
+        >
       </div>
     </v-form>
   </v-container>
