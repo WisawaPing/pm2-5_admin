@@ -155,10 +155,10 @@
     </v-card>
 
     <!-- ปุ่มบันทึกมุมขวาล่าง -->
-    <div class="text-end mt-6" v-if="!isView">
+    <div class="text-end mt-6">
       <v-btn rounded @click="router.go(-1)">กลับ</v-btn>
       &emsp;
-      <v-btn color="success" rounded @click="saveInnovation">
+      <v-btn v-if="!isView" color="success" rounded @click="saveInnovation">
         <v-icon start>mdi-content-save</v-icon>
         บันทึกข้อมูล
       </v-btn>
