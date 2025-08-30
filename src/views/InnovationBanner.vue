@@ -16,6 +16,13 @@
 
     <!-- ข้อความ Banner -->
     <v-card class="mb-8 pa-6 text-card" elevation="4">
+      <h3 class="section-title">หัวข้อ Banner</h3>
+      <v-text-field
+        v-model="bannerTitle"
+        variant="outlined"
+        rounded
+        placeholder="พิมพ์หัวข้อ Banner ที่นี่..."
+      ></v-text-field>
       <h3 class="section-title">ข้อความ Banner</h3>
       <v-textarea
         v-model="bannerText"
@@ -44,12 +51,14 @@ import {
 } from "@/api/innovationBanner";
 import FileUploader from "@/components/FileUploader.vue";
 
+const bannerTitle = ref("");
 const bannerText = ref("");
 const bannerImage = ref(null);
 
 onMounted(async () => {
   const res = await getInnovationBanner();
   if (res.response_status === "SUCCESS") {
+    bannerTitle.value = res.data.bannerTitle || "";
     bannerText.value = res.data.bannerText || "";
     bannerImage.value = res.data.bannerImage || null;
   } else {
@@ -59,6 +68,7 @@ onMounted(async () => {
 
 const saveAll = async () => {
   const res = await updateInnovationBanner({
+    bannerTitle: bannerTitle.value,
     bannerText: bannerText.value,
     bannerImage: bannerImage.value,
   });

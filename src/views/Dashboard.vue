@@ -66,7 +66,7 @@
           v-for="(item, index) in newsList"
           :key="index"
         >
-          <v-card class="pa-4 card-item" elevation="4">
+          <v-card class="pa-4 card-item-1 d-flex flex-column" elevation="4">
             <v-text-field
               v-model="item.location"
               label="ชื่อพื้นที่"
@@ -84,13 +84,15 @@
               class="mb-2"
             ></v-text-field>
 
-            <FileUploader v-model="item.image" label="รูปภาพ"></FileUploader>
+            <div class="image-wrapper mb-2">
+              <FileUploader v-model="item.image" label="รูปภาพ"></FileUploader>
+            </div>
 
             <v-btn
               color="error"
               rounded
               text
-              class="mt-3"
+              class="mt-auto"
               @click="removeNews(index)"
             >
               <v-icon start>mdi-delete</v-icon>
@@ -214,5 +216,23 @@ const saveAll = async () => {
 .card-item:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-item-1 {
+  height: 100%; /* ให้ card สูงเต็ม column */
+  display: flex;
+  flex-direction: column;
+}
+
+.image-wrapper {
+  height: 300px; /* fix ความสูงรูป */
+  overflow: hidden;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* crop รูปให้เต็มขนาดโดยไม่บิด */
+  border-radius: 4px;
 }
 </style>
