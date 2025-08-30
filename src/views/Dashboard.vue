@@ -33,14 +33,16 @@
         <v-col cols="12" md="6" v-for="(card, i) in mapCards" :key="i">
           <v-card class="pa-4 card-item" elevation="4">
             <h5 class="mb-3">การ์ด {{ i + 1 }}</h5>
-            <v-text-field
+            <v-textarea
               v-model="card.title"
               placeholder="หัวข้อ"
               variant="outlined"
+              rows="1"
+              auto-grow
               dense
               rounded
               class="mb-2"
-            ></v-text-field>
+            ></v-textarea>
             <v-textarea
               v-model="card.text"
               placeholder="รายละเอียด"
