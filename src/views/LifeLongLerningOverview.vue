@@ -16,6 +16,13 @@
 
     <!-- ข้อความ Banner -->
     <v-card class="mb-8 pa-6 text-card" elevation="4">
+      <h3 class="section-title">หัวข้อ Banner</h3>
+      <v-text-field
+        v-model="bannerTitle"
+        variant="outlined"
+        rounded
+        placeholder="พิมพ์หัวข้อ Banner ที่นี่..."
+      ></v-text-field>
       <h3 class="section-title">ข้อความ Banner</h3>
       <v-textarea
         v-model="bannerText"
@@ -44,6 +51,7 @@ import {
 } from "@/api/lifeLongLearningBanner";
 import FileUploader from "@/components/FileUploader.vue";
 
+const bannerTitle = ref("");
 const bannerText = ref("");
 const bannerImage = ref(null);
 
@@ -51,6 +59,7 @@ const bannerImage = ref(null);
 onMounted(async () => {
   const res = await getLifeLongLearningBanner();
   if (res && res.id) {
+    bannerTitle.value = res.bannerTitle || "";
     bannerText.value = res.bannerText || "";
     bannerImage.value = res.bannerImage || null;
   }
@@ -59,6 +68,7 @@ onMounted(async () => {
 // ฟังก์ชันบันทึกทั้งหมด
 const saveAll = async () => {
   const payload = {
+    bannerTitle: bannerTitle.value,
     bannerText: bannerText.value,
     bannerImage: bannerImage.value,
   };

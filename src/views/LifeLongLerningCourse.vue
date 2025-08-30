@@ -11,6 +11,11 @@
     </div>
 
     <v-form>
+      <v-card class="mb-8 pa-6 text-card" elevation="4">
+        <h3 class="section-title">รูปภาพหลักสูตร</h3>
+        <FileUploader v-model="course.image" label="รูปภาพ"></FileUploader>
+      </v-card>
+
       <v-text-field
         v-model="course.name"
         label="ชื่อหลักสูตร"
@@ -27,14 +32,14 @@
         variant="outlined"
         rounded
       />
-      <v-text-field
+      <!-- <v-text-field
         v-model="course.duration"
         label="ระยะเวลาเรียน (รวม)"
         :readonly="isView"
         class="mb-4"
         variant="outlined"
         rounded
-      />
+      /> -->
 
       <h2 class="text-h6 mb-2">หัวข้อของบทเรียน</h2>
       <v-expansion-panels multiple>
@@ -84,6 +89,7 @@
                 class="mb-3"
                 variant="outlined"
                 rounded
+                type="number"
               />
               <v-text-field
                 v-model="content.speaker"
@@ -155,11 +161,13 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getCourseById, createCourse, updateCourse } from "@/api/course.js";
+import FileUploader from "@/components/FileUploader.vue";
 
 const route = useRoute();
 const router = useRouter();
 
 const course = ref({
+  image: "",
   name: "",
   description: "",
   duration: "",
