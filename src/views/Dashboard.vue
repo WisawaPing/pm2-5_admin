@@ -83,15 +83,9 @@
               rounded
               class="mb-2"
             ></v-text-field>
-            <v-file-input
-              v-model="item.image"
-              label="รูปภาพ"
-              accept="image/*"
-              variant="outlined"
-              dense
-              show-size
-              prepend-icon="mdi-image"
-            ></v-file-input>
+
+            <FileUploader v-model="item.image" label="รูปภาพ"></FileUploader>
+
             <v-btn
               color="error"
               rounded
@@ -123,6 +117,7 @@
 </template>
 
 <script setup>
+import FileUploader from "@/components/FileUploader.vue";
 import { ref, onMounted } from "vue";
 import { getDashboard, updateDashboard } from "@/api/dashboard";
 

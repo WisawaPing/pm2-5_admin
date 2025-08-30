@@ -74,14 +74,15 @@
       <v-row>
         <v-col cols="12" md="12">
           <v-card class="pa-4 card-item" elevation="4">
-            <v-file-input
+            <!-- <v-file-input
               label="รูปภาพ Timeline"
               accept="image/*"
               variant="outlined"
               dense
               show-size
               prepend-icon="mdi-image"
-            ></v-file-input>
+            ></v-file-input> -->
+            <FileUploader v-model="timelineImage" label="รูปภาพ"></FileUploader>
           </v-card>
         </v-col>
       </v-row>
@@ -100,6 +101,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { getAbout, updateAbout } from "@/api/about";
+import FileUploader from "@/components/FileUploader.vue";
 
 const bannerText = ref("");
 const newsList = ref([{ location: "", description: "" }]);

@@ -97,7 +97,7 @@ const saveForm = async () => {
   try {
     const res = await updateContact(form.value);
     if (res.response_status === "SUCCESS") {
-      alert("บันทึกข้อมูลเรียบร้อย");
+      alert("✅ บันทึกข้อมูลทั้งหมดเรียบร้อย!");
     } else {
       alert(res.message || "บันทึกไม่สำเร็จ");
     }

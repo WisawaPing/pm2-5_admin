@@ -11,14 +11,7 @@
     <!-- ส่วนรูปภาพ Banner -->
     <v-card class="mb-8 pa-6 text-card" elevation="4">
       <h3 class="section-title">รูปภาพ Banner</h3>
-      <v-file-input
-        v-model="bannerImage"
-        accept="image/*"
-        variant="outlined"
-        dense
-        show-size
-        prepend-icon="mdi-image"
-      ></v-file-input>
+      <FileUploader v-model="bannerImage" label="รูปภาพ"></FileUploader>
     </v-card>
 
     <!-- ข้อความ Banner -->
@@ -115,6 +108,7 @@ import {
   getCommunityOverview,
   updateCommunityOverview,
 } from "@/api/communityOverview";
+import FileUploader from "@/components/FileUploader.vue";
 
 const bannerTitle = ref("");
 const bannerText = ref("");

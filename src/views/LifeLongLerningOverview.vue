@@ -11,15 +11,7 @@
 
     <v-card class="mb-8 pa-6 text-card" elevation="4">
       <h3 class="section-title">รูปภาพ Banner</h3>
-      <v-file-input
-        v-model="bannerImage"
-        label="เลือกภาพ Banner"
-        accept="image/*"
-        variant="outlined"
-        dense
-        show-size
-        prepend-icon="mdi-image"
-      ></v-file-input>
+      <FileUploader v-model="bannerImage" label="รูปภาพ"></FileUploader>
     </v-card>
 
     <!-- ข้อความ Banner -->
@@ -50,6 +42,7 @@ import {
   getLifeLongLearningBanner,
   saveLifeLongLearningBanner,
 } from "@/api/lifeLongLearningBanner";
+import FileUploader from "@/components/FileUploader.vue";
 
 const bannerText = ref("");
 const bannerImage = ref(null);

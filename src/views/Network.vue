@@ -29,15 +29,7 @@
         rounded
         class="mb-4"
       ></v-textarea>
-      <v-file-input
-        v-model="network.bannerImage"
-        label="รูปภาพ Banner"
-        accept="image/*"
-        variant="outlined"
-        dense
-        show-size
-        prepend-icon="mdi-image"
-      ></v-file-input>
+      <FileUploader v-model="network.bannerImage" label="รูปภาพ"></FileUploader>
     </v-card>
 
     <!-- ข้อความเกริ่นนำ -->
@@ -81,15 +73,10 @@
               </v-col>
 
               <v-col cols="12" md="4">
-                <v-file-input
+                <FileUploader
                   v-model="item.image"
-                  label="อัพโหลดรูปภาพ"
-                  accept="image/*"
-                  variant="outlined"
-                  dense
-                  show-size
-                  prepend-icon="mdi-image"
-                ></v-file-input>
+                  label="รูปภาพ"
+                ></FileUploader>
               </v-col>
 
               <v-col cols="12" md="4">
@@ -104,15 +91,10 @@
               </v-col>
 
               <v-col cols="12" md="6">
-                <v-file-input
+                <FileUploader
                   v-model="item.teamImage"
                   label="อัพโหลดรูปภาพคณะทำงาน"
-                  accept="image/*"
-                  variant="outlined"
-                  dense
-                  show-size
-                  prepend-icon="mdi-account-group"
-                ></v-file-input>
+                ></FileUploader>
               </v-col>
             </v-row>
 
@@ -136,15 +118,10 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
-                  <v-file-input
+                  <FileUploader
                     v-model="pilot.image"
                     label="อัพโหลดรูปภาพ"
-                    accept="image/*"
-                    variant="outlined"
-                    dense
-                    show-size
-                    prepend-icon="mdi-image"
-                  ></v-file-input>
+                  ></FileUploader>
                 </v-col>
                 <v-col cols="12" class="text-right">
                   <v-btn
@@ -198,6 +175,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { getAcademicNetwork, saveAcademicNetwork } from "@/api/academicNetwork";
+import FileUploader from "@/components/FileUploader.vue";
 
 const network = ref({
   bannerTitle: "",

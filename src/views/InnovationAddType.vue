@@ -2,7 +2,6 @@
   <v-container fluid class="pa-6">
     <h1 class="mb-6 title d-flex justify-space-between align-center">
       จัดการข้อมูลประเภทนวัตกรรมการต่างๆ
-
       <v-btn v-if="!isView" color="success" rounded @click="saveInnovation">
         <v-icon start>mdi-content-save</v-icon>
         บันทึกทั้งหมด
@@ -55,21 +54,11 @@
           />
         </v-col>
         <v-col cols="12">
-          <v-file-input
-            v-model="innovation.planImageFile"
+          <!-- ใช้ FileUploader สำหรับ planImage -->
+          <FileUploader
+            v-model="innovation.planImage"
             label="ภาพแผนผัง"
-            accept="image/*"
-            variant="outlined"
-            dense
-            show-size
-            prepend-icon="mdi-image"
             :disabled="isView"
-          />
-          <v-img
-            v-if="innovation.planImage"
-            :src="innovation.planImage"
-            max-width="300"
-            class="mt-2"
           />
         </v-col>
       </v-row>
@@ -126,25 +115,21 @@
       </v-row>
     </v-card>
 
-    <!-- แกลลอรี่ -->
+    <!-- แกลลอรี่ (MultiFileUploader) -->
     <v-card class="mb-8 pa-6 text-card" elevation="4">
       <h3 class="section-title">แกลลอรี่</h3>
-      <v-file-input
-        v-model="innovation.galleryFiles"
-        label="อัพโหลดรูปภาพหลายรูป"
-        accept="image/*"
-        multiple
-        variant="outlined"
-        dense
-        show-size
-        prepend-icon="mdi-image-multiple"
+      <MultiFileUploader
+        v-model="innovation.gallery"
+        label="อัพโหลดแกลลอรี่"
         :disabled="isView"
       />
-      <v-row
-        v-if="innovation.gallery && innovation.gallery.length > 0"
-        class="mt-2"
-      >
-        <v-col v-for="(img, i) in innovation.gallery" :key="i" cols="auto">
+
+      <v-row v-if="innovation.gallery.length > 0" class="mt-2">
+        <v-col
+          v-for="(img, i) in innovation.gallery"
+          :key="'preview-' + i"
+          cols="auto"
+        >
           <v-img :src="img" max-width="100" max-height="100" />
         </v-col>
       </v-row>
@@ -177,6 +162,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import FileUploader from "@/components/FileUploader.vue";
+import MultiFileUploader from "@/components/MultiFileUploader.vue";
 import {
   createInnovationType,
   getInnovationTypeById,
@@ -190,14 +177,12 @@ const innovation = ref({
   type: "",
   title: "",
   location: "",
-  planImage: "", // URL ของภาพเดิม
-  planImageFile: null, // ไฟล์ใหม่ถ้ามี
+  planImage: "",
   context: "",
   process: "",
   results: "",
   training: "",
-  gallery: [], // URL ของภาพเดิม
-  galleryFiles: [], // ไฟล์ใหม่ถ้าอัปโหลด
+  gallery: [],
   videoLink: "",
 });
 
@@ -212,7 +197,13 @@ onMounted(async () => {
   if (id) {
     try {
       const res = await getInnovationTypeById(id);
-      Object.assign(innovation.value, res.data);
+      const data = res.data;
+
+      if (typeof data.gallery === "string") {
+        data.gallery = JSON.parse(data.gallery);
+      }
+
+      Object.assign(innovation.value, data);
     } catch (err) {
       console.error(err);
       alert("ไม่สามารถดึงข้อมูลได้");

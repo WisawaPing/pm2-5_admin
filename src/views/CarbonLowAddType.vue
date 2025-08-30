@@ -92,49 +92,21 @@
     <!-- ผังการทำงาน -->
     <v-card class="mb-8 pa-6 text-card" elevation="4">
       <h3 class="section-title">ผังการทำงาน</h3>
-      <v-file-input
+      <FileUploader
         v-model="community.workflowImage"
         label="อัปโหลดผังการทำงาน"
-        accept="image/*"
-        variant="outlined"
-        dense
-        show-size
-        prepend-icon="mdi-image"
         :disabled="isView"
-      ></v-file-input>
-      <v-img
-        v-if="
-          community.workflowImage && typeof community.workflowImage === 'string'
-        "
-        :src="community.workflowImage"
-        max-width="300"
-        class="mt-2"
       />
     </v-card>
 
     <!-- ภาพกิจกรรม -->
     <v-card class="mb-8 pa-6 text-card" elevation="4">
       <h3 class="section-title">ภาพกิจกรรม</h3>
-      <v-file-input
+      <MultiFileUploader
         v-model="community.activityImages"
         label="อัปโหลดภาพกิจกรรมหลายรูป"
-        accept="image/*"
-        multiple
-        variant="outlined"
-        dense
-        show-size
-        prepend-icon="mdi-image-multiple"
         :disabled="isView"
-      ></v-file-input>
-      <v-row v-if="community.activityImages.length > 0" class="mt-2">
-        <v-col
-          v-for="(img, i) in community.activityImages"
-          :key="i"
-          cols="auto"
-        >
-          <v-img :src="img" max-width="100" max-height="100" />
-        </v-col>
-      </v-row>
+      />
     </v-card>
 
     <!-- ปุ่มบันทึกล่าง -->
@@ -150,6 +122,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import FileUploader from "@/components/FileUploader.vue";
+import MultiFileUploader from "@/components/MultiFileUploader.vue";
 import {
   createCommunityType,
   getCommunityTypeById,
@@ -181,7 +155,30 @@ onMounted(async () => {
   if (id) {
     try {
       const res = await getCommunityTypeById(id);
-      Object.assign(community.value, res.data);
+      const data = res.data;
+
+      // workflowImage เป็น string หรือ null
+      community.value.workflowImage = data.workflowImage || null;
+
+      // activityImages แปลงจาก JSON string เป็น array
+      if (typeof data.activityImages === "string") {
+        try {
+          community.value.activityImages = JSON.parse(data.activityImages);
+        } catch (e) {
+          console.error("Cannot parse activityImages:", e);
+          community.value.activityImages = [];
+        }
+      } else {
+        community.value.activityImages = data.activityImages || [];
+      }
+
+      // กรณี field อื่นๆ ก็ assign ปกติ
+      community.value.type = data.type || "";
+      community.value.title = data.title || "";
+      community.value.location = data.location || "";
+      community.value.carbonStorage = data.carbonStorage || "";
+      community.value.carbonReduction = data.carbonReduction || "";
+      community.value.context = data.context || "";
     } catch (err) {
       console.error(err);
       alert("ไม่สามารถดึงข้อมูลได้");
